@@ -12,20 +12,32 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@WebFilter(value = "/*")
+@WebFilter("/*")
 public class UserLoginFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
         throws IOException, ServletException {
-        List<String> permitUrl = new ArrayList<>(Arrays.asList(
-            new String[]{
-                "/login",
-                "/test",
-            }
-        ));
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
+        List<String> permitSuffixList = Arrays.asList(
+                ".css",
+                ".js",
+                ".jpg",
+                ".png",
+                ".webp",
+                ".map",
+                ".mp3"
+        );
+        if (permitSuffixList.stream().anyMatch(e -> req.getRequestURI().endsWith(e))) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        List<String> permitUrl = Arrays.asList(
+                "/login",
+                "/test"
+        );
         if (permitUrl.contains(req.getRequestURI())) {
             chain.doFilter(request, response);
             return;
