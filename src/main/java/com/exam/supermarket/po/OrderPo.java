@@ -8,13 +8,13 @@ import java.io.Serializable;
 @Data
 public class OrderPo implements Serializable {
     private static final long serialVersionUID = -2868325200355998897L;
-    String id;
-    String customerId;
-    String cashierId;
-    String goodId;
-    Integer num;
-    String payable;
-    String payment;
-    String goodsTag;
-    String time;
+    private String id;
+    private String customerId;
+    private String cashierId;
+    private String goodId;
+    private Integer num;
+    private String payable;
+    private String payment;
+    private String goodsTag;
+    private String time;
 }

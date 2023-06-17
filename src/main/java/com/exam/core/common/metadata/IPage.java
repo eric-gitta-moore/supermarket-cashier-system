@@ -18,24 +18,6 @@ public interface IPage<T> {
     List<OrderItem> orders();
 
     /**
-     * 自动优化 COUNT SQL【 默认：true 】
-     *
-     * @return true 是 / false 否
-     */
-    default boolean optimizeCountSql() {
-        return true;
-    }
-
-    /**
-     * 两个参数都为 true 才会进行sql处理
-     *
-     * @return true 是 / false 否
-     */
-    default boolean optimizeJoinOfCountSql() {
-        return true;
-    }
-
-    /**
      * 进行 count 查询 【 默认: true 】
      *
      * @return true 是 / false 否

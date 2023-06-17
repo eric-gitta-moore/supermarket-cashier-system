@@ -126,21 +126,34 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     }
 
     @Override
-    public T selectOne(T entity, boolean throwEx) throws SQLException {
-        return BaseDao.super.selectOne(entity, throwEx);
+    public T selectOne(T entity, boolean throwEx) {
+        try {
+            return BaseDao.super.selectOne(entity, throwEx);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public boolean exists(Map<String, Object> columnMap) throws SQLException {
-        return BaseDao.super.exists(columnMap);
+    public boolean exists(Map<String, Object> columnMap) {
+        try {
+            return BaseDao.super.exists(columnMap);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public Long selectCount(Map<String, Object> columnMap) throws SQLException {
+    public Long selectCount(Map<String, Object> columnMap) {
         String sql = "select count(1) from " + this.table + " where 1=1";
         sql = SqlUtil.concatWhere(sql, columnMap);
         Object[] params = columnMap.values().toArray();
-        Long cnt = runner.query(sql, new ScalarHandler<>(), params);
+        Long cnt = null;
+        try {
+            cnt = runner.query(sql, new ScalarHandler<>(), params);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return cnt;
     }
 
@@ -161,11 +174,41 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
     @Override
     public <P extends IPage<T>> P selectPage(P page, Map<String, Object> columnMap) {
-        return null;
+        page.setTotal(this.selectCount(columnMap));
+
+        String sql = String.format("select * from %s where 1=1", this.table);
+        sql = SqlUtil.concatWhere(sql, columnMap);
+        sql += " limit " + page.offset() + "," + page.getSize();
+        Class<T> tClass = GenericsUtils.getSuperClassGenericType(this.getClass());
+        List<T> poList = null;
+        try {
+            poList = runner.query(sql, new BeanListHandler<>(tClass));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        page.setRecords(poList);
+        return page;
+    }
+
+    @Override
+    public <P extends IPage<T>> P selectPage(P page) {
+        return selectPage(page, new HashMap<>());
     }
 
     @Override
     public <P extends IPage<Map<String, Object>>> P selectMapsPage(P page, Map<String, Object> columnMap) {
-        return null;
+        page.setTotal(this.selectCount(columnMap));
+
+        String sql = String.format("select * from %s where 1=1", this.table);
+        sql = SqlUtil.concatWhere(sql, columnMap);
+        sql += " limit " + page.offset() + "," + page.getSize();
+        List<Map<String, Object>> poList = null;
+        try {
+            poList = runner.query(sql, new MapListHandler());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        page.setRecords(poList);
+        return page;
     }
 }
