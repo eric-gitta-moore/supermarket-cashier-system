@@ -1,21 +1,19 @@
 package com.exam.core.common.util;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ClassFieldUtil {
 
     public static Map<String, Object> getFields(Object entity, List<String> removedFields) {
         Map<String, Object> queryParam = getFieldsWithNull(entity, removedFields);
-        queryParam.keySet().stream().map(k -> {
-            if (queryParam.get(k) == null) {
-                queryParam.remove(k);
+        Iterator<Map.Entry<String, Object>> iterator = queryParam.entrySet().iterator();
+        for (; iterator.hasNext(); ) {
+            Map.Entry<String, Object> next = iterator.next();
+            if (next.getValue() == null) {
+                iterator.remove();
             }
-            return k;
-        });
+        }
         return queryParam;
     }
 
