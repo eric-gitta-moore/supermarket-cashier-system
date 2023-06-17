@@ -4,24 +4,26 @@ import com.exam.core.common.exception.TooManyResultsException;
 import com.exam.core.common.metadata.IPage;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 public interface BaseDao<T> {
+
     /**
      * 插入一条记录
      *
      * @param entity 实体对象
      */
-    int insert(T entity);
+    T insert(T entity) throws SQLException;
 
     /**
      * 根据 ID 删除
      *
      * @param id 主键ID
      */
-    int deleteById(Serializable id);
+    int deleteById(Serializable id) throws SQLException;
 
     /**
      * 根据实体(ID)删除
@@ -29,28 +31,28 @@ public interface BaseDao<T> {
      * @param entity 实体对象
      * @since 3.4.4
      */
-    int deleteById(T entity);
+    int deleteById(T entity) throws SQLException;
 
     /**
      * 根据 columnMap 条件，删除记录
      *
      * @param columnMap 表字段 map 对象
      */
-    int deleteByMap(Map<String, Object> columnMap);
+    int deleteByMap(Map<String, Object> columnMap) throws SQLException;
 
     /**
      * 删除（根据ID或实体 批量删除）
      *
      * @param idList 主键ID列表或实体列表(不能为 null 以及 empty)
      */
-    int deleteBatchIds(Collection<?> idList);
+    int deleteBatchIds(Collection<?> idList) throws SQLException;
 
     /**
      * 根据 ID 修改
      *
      * @param entity 实体对象
      */
-    int updateById(T entity);
+    int updateById(T entity) throws SQLException;
 
     /**
      * 根据 whereEntity 条件，更新记录
@@ -58,28 +60,28 @@ public interface BaseDao<T> {
      * @param entity    实体对象 (set 条件值,可以为 null)
      * @param columnMap 表字段 map 对象（可以为 null,里面的 entity 用于生成 where 语句）
      */
-    int update(T entity, Map<String, Object> columnMap);
+    int update(T entity, Map<String, Object> columnMap) throws SQLException;
 
     /**
      * 根据 ID 查询
      *
      * @param id 主键ID
      */
-    T selectById(Serializable id);
+    T selectById(Serializable id) throws SQLException;
 
     /**
      * 查询（根据ID 批量查询）
      *
      * @param idList 主键ID列表(不能为 null 以及 empty)
      */
-    List<T> selectBatchIds(Collection<? extends Serializable> idList);
+    List<T> selectBatchIds(Collection<? extends Serializable> idList) throws SQLException;
 
     /**
      * 查询（根据 columnMap 条件）
      *
      * @param columnMap 表字段 map 对象
      */
-    List<T> selectByMap(Map<String, Object> columnMap);
+    List<T> selectByMap(Map<String, Object> columnMap) throws SQLException;
 
     /**
      * 根据 entity 条件，查询一条记录，现在会根据{@code throwEx}参数判断是否抛出异常，如果为false就直接返回一条数据
@@ -88,8 +90,8 @@ public interface BaseDao<T> {
      * @param columnMap 表字段 map 对象
      * @param throwEx   boolean 参数，为true如果存在多个结果直接抛出异常
      */
-    default T selectOne(Map<String, Object> columnMap, boolean throwEx) {
-        List<T> list = this.selectList(columnMap);
+    default T selectOne(T entity, boolean throwEx) throws SQLException {
+        List<T> list = this.selectList(entity);
         // 抄自 DefaultSqlSession#selectOne
         int size = list.size();
         if (size == 1) {
@@ -110,7 +112,7 @@ public interface BaseDao<T> {
      * @param columnMap 表字段 map 对象
      * @return 是否存在记录
      */
-    default boolean exists(Map<String, Object> columnMap) {
+    default boolean exists(Map<String, Object> columnMap) throws SQLException {
         Long count = this.selectCount(columnMap);
         return null != count && count > 0;
     }
@@ -120,29 +122,21 @@ public interface BaseDao<T> {
      *
      * @param columnMap 表字段 map 对象
      */
-    Long selectCount(Map<String, Object> columnMap);
+    Long selectCount(Map<String, Object> columnMap) throws SQLException;
 
     /**
      * 根据 entity 条件，查询全部记录
      *
      * @param columnMap 表字段 map 对象
      */
-    List<T> selectList(Map<String, Object> columnMap);
+    List<T> selectList(T entity) throws SQLException;
 
     /**
      * 根据 Wrapper 条件，查询全部记录
      *
      * @param columnMap 表字段 map 对象
      */
-    List<Map<String, Object>> selectMaps(Map<String, Object> columnMap);
-
-    /**
-     * 根据 Wrapper 条件，查询全部记录
-     * <p>注意： 只返回第一个字段的值</p>
-     *
-     * @param columnMap 表字段 map 对象
-     */
-    List<Object> selectObjs(Map<String, Object> columnMap);
+    List<Map<String, Object>> selectMaps(Map<String, Object> columnMap) throws SQLException;
 
     /**
      * 根据 entity 条件，查询全部记录（并翻页）

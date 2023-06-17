@@ -2,96 +2,161 @@ package com.exam.core.common.dao.impl;
 
 import com.exam.core.common.dao.BaseDao;
 import com.exam.core.common.metadata.IPage;
+import com.exam.core.common.util.ClassFieldUtil;
+import com.exam.core.common.util.GenericsUtils;
+import com.exam.core.common.util.SqlUtil;
+import com.exam.supermarket.util.DbPoolUtil;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.MapListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BaseDaoImpl<T> implements BaseDao<T> {
 
-    protected String table = null;
+    protected String table;
     protected String idField = "id";
 
+    private QueryRunner runner;
 
-    @Override
-    public int insert(T entity) {
-        return 0;
+    public BaseDaoImpl() {
+        this.runner = DbPoolUtil.getRunner();
     }
 
     @Override
-    public int deleteById(Serializable id) {
-        return 0;
+    public T insert(T entity) throws SQLException {
+        Map<String, Object> entityFieldMap = ClassFieldUtil.getFields(entity);
+        entityFieldMap.remove("id");
+        String sql = String.format("insert into %s (%s) values (%s)",
+            this.table,
+            String.join(",", entityFieldMap.keySet()),
+            String.join(",", entityFieldMap.values().stream().map(e -> "?").toList()));
+
+        Class<T> tClass = GenericsUtils.getSuperClassGenericType(this.getClass());
+        return runner.insert(sql, new BeanHandler<>(tClass), entityFieldMap.values().toArray());
     }
 
     @Override
-    public int deleteById(T entity) {
-        return 0;
+    public int deleteById(Serializable id) throws SQLException {
+        return this.deleteBatchIds(Arrays.asList(id));
     }
 
     @Override
-    public int deleteByMap(Map<String, Object> columnMap) {
-        return 0;
+    public int deleteById(T entity) throws SQLException {
+        Map<String, Object> entityFieldMap = ClassFieldUtil.getFields(entity);
+        return this.deleteBatchIds(Arrays.asList(entityFieldMap.get(this.idField)));
     }
 
     @Override
-    public int deleteBatchIds(Collection<?> idList) {
-        return 0;
+    public int deleteByMap(Map<String, Object> columnMap) throws SQLException {
+        if (columnMap == null || columnMap.isEmpty()) {
+            return 0;
+        }
+        String sql = String.format("delete from %s where 1=1", this.table);
+        sql = SqlUtil.concatWhere(sql, columnMap);
+        return this.runner.update(sql, columnMap.values().toArray());
     }
 
     @Override
-    public int updateById(T entity) {
-        return 0;
+    public int deleteBatchIds(Collection<?> idList) throws SQLException {
+        List<String> ids = idList.stream().map(String::valueOf).toList();
+        String sql = String.format("delete from %s where %s in (%s)",
+            this.table,
+            this.idField,
+            String.join(",", ids.stream().map(e -> "?").toList()));
+        return runner.update(sql, ids.toArray());
     }
 
     @Override
-    public int update(T entity, Map<String, Object> columnMap) {
-        return 0;
+    public int updateById(T entity) throws SQLException {
+        return update(entity, new HashMap<>());
     }
 
     @Override
-    public T selectById(Serializable id) {
-        return null;
+    public int update(T entity, Map<String, Object> columnMap) throws SQLException {
+        Object id;
+        Map<String, Object> entityFieldMap = ClassFieldUtil.getFields(entity);
+        if (columnMap.containsKey(this.idField)) {
+            id = columnMap.get(this.idField);
+        } else {
+            id = entityFieldMap.get(this.idField);
+        }
+        entityFieldMap.remove(this.idField);
+        List<String> setSql = entityFieldMap.entrySet().stream().map(e -> e.getKey() + "=?").toList();
+        String sql = String.format("update %s set %s where %s=?",
+            this.table,
+            String.join(",", setSql),
+            this.idField);
+        List<Object> params = new ArrayList<>(entityFieldMap.values());
+        params.add(id);
+        return this.runner.update(sql, params.toArray());
     }
 
     @Override
-    public List<T> selectBatchIds(Collection<? extends Serializable> idList) {
-        return null;
+    public T selectById(Serializable id) throws SQLException {
+        String sql = "select * from " + this.table + " where " + this.idField + "=?";
+        Class<T> tClass = GenericsUtils.getSuperClassGenericType(this.getClass());
+        T poList = runner.query(sql, new BeanHandler<>(tClass), id);
+        return poList;
     }
 
     @Override
-    public List<T> selectByMap(Map<String, Object> columnMap) {
-        return null;
+    public List<T> selectBatchIds(Collection<? extends Serializable> idList) throws SQLException {
+        String sql = "select * from " + this.table + " where 1=1";
+        List<String> ids = idList.stream().map(e -> e.toString()).collect(Collectors.toList());
+        sql += " and " + this.idField + " in (" + String.join(",", ids) + ")";
+        Class<T> tClass = GenericsUtils.getSuperClassGenericType(this.getClass());
+        List<T> poList = runner.query(sql, new BeanListHandler<>(tClass));
+        return poList;
     }
 
     @Override
-    public T selectOne(Map<String, Object> columnMap, boolean throwEx) {
-        return BaseDao.super.selectOne(columnMap, throwEx);
+    public List<T> selectByMap(Map<String, Object> columnMap) throws SQLException {
+        String sql = "select * from " + this.table + " where 1=1";
+        sql = SqlUtil.concatWhere(sql, columnMap);
+        Class<T> tClass = GenericsUtils.getSuperClassGenericType(this.getClass());
+        Object[] params = columnMap.values().toArray();
+        List<T> poList = runner.query(sql, new BeanListHandler<>(tClass), params);
+        return poList;
     }
 
     @Override
-    public boolean exists(Map<String, Object> columnMap) {
+    public T selectOne(T entity, boolean throwEx) throws SQLException {
+        return BaseDao.super.selectOne(entity, throwEx);
+    }
+
+    @Override
+    public boolean exists(Map<String, Object> columnMap) throws SQLException {
         return BaseDao.super.exists(columnMap);
     }
 
     @Override
-    public Long selectCount(Map<String, Object> columnMap) {
-        return null;
+    public Long selectCount(Map<String, Object> columnMap) throws SQLException {
+        String sql = "select count(1) from " + this.table + " where 1=1";
+        sql = SqlUtil.concatWhere(sql, columnMap);
+        Object[] params = columnMap.values().toArray();
+        Long cnt = runner.query(sql, new ScalarHandler<>(), params);
+        return cnt;
     }
 
     @Override
-    public List<T> selectList(Map<String, Object> columnMap) {
-        return null;
+    public List<T> selectList(T entity) throws SQLException {
+        Map<String, Object> queryParam = ClassFieldUtil.getFields(entity);
+        return this.selectByMap(queryParam);
     }
 
     @Override
-    public List<Map<String, Object>> selectMaps(Map<String, Object> columnMap) {
-        return null;
-    }
-
-    @Override
-    public List<Object> selectObjs(Map<String, Object> columnMap) {
-        return null;
+    public List<Map<String, Object>> selectMaps(Map<String, Object> columnMap) throws SQLException {
+        String sql = "select * from " + this.table + " where 1=1";
+        sql = SqlUtil.concatWhere(sql, columnMap);
+        Object[] params = columnMap.values().toArray();
+        List<Map<String, Object>> poList = runner.query(sql, new MapListHandler(), params);
+        return poList;
     }
 
     @Override

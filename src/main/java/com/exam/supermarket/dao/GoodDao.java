@@ -5,6 +5,7 @@ import com.exam.supermarket.po.GoodPo;
 
 public class GoodDao extends BaseDao<GoodPo> {
 
-    protected String table = "good";
-
+    public GoodDao() {
+        this.table = "good";
+    }
 }

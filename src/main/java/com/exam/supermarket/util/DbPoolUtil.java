@@ -1,7 +1,7 @@
 package com.exam.supermarket.util;
 
+import com.exam.core.common.dbutils.QueryRunner;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import org.apache.commons.dbutils.QueryRunner;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
