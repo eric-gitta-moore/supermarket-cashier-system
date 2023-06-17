@@ -9,10 +9,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
 
-    private final PrintStream log = System.out;
+    private Logger logger = Logger.getLogger(this.getClass().getName());
 
     @Override
     public void fillStatement(PreparedStatement stmt, Object... params) throws SQLException {
@@ -24,7 +25,7 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
             sqlBuilder.append(param).append(", ");
         }
         sqlBuilder.append("]");
-        this.log.println("Prepared statement: " + sqlBuilder.toString());
+        this.logger.info("Prepared statement: " + sqlBuilder.toString());
 
     }
 
