@@ -1,6 +1,8 @@
 package com.exam.supermarket.controller;
 
 import com.exam.core.base.controller.BaseServlet;
+import com.exam.core.common.metadata.IPage;
+import com.exam.core.common.plugin.pagination.Page;
 import com.exam.supermarket.dao.GoodDao;
 import com.exam.supermarket.po.GoodPo;
 import jakarta.servlet.annotation.WebServlet;
@@ -47,12 +49,8 @@ public class TestServlet extends BaseServlet {
     }
 
     public void selectCountTest() {
-        try {
-            Long goodPos = goodDao.selectCount(new HashMap<>());
-            System.out.println(goodPos);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Long goodPos = goodDao.selectCount(new HashMap<>());
+        System.out.println(goodPos);
     }
 
     public void selectBatchIdsTest() {
@@ -87,8 +85,17 @@ public class TestServlet extends BaseServlet {
         }
     }
 
+    public void selectPage() {
+        IPage<GoodPo> page = new Page<>(2, 2);
+        goodDao.selectPage(page);
+        System.out.println(page.getRecords());
+        System.out.println(page.getTotal());
+        System.out.println(page.getPages());
+        System.out.println(page.getCurrent());
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        insertTest();
+        selectPage();
     }
 }

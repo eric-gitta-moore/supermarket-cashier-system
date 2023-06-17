@@ -8,8 +8,8 @@ import java.io.Serializable;
 @Data
 public class GoodPo implements Serializable {
     private static final long serialVersionUID = -6910840172079985219L;
-    Integer id;
-    String name;
-    Integer stock;
-    Double price;
+    private Integer id;
+    private String name;
+    private Integer stock;
+    private Double price;
 }

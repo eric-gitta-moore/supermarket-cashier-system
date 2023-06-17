@@ -138,7 +138,7 @@ public class BaseService<T> {
     /**
      * 根据 whereEntity 条件，更新记录
      *
-     * @param entity        实体对象
+     * @param entity 实体对象
      */
     public boolean update(T entity, Map<String, Object> updateWrapper) throws SQLException {
         return dao.update(entity, updateWrapper) > 0;
@@ -159,7 +159,7 @@ public class BaseService<T> {
      * @param entityList 实体对象集合
      * @param batchSize  更新批次数量
      */
-    public boolean updateBatchById(Collection<T> entityList, int batchSize){
+    public boolean updateBatchById(Collection<T> entityList, int batchSize) {
         // TODO: 批量更新
         return false;
     }
@@ -218,21 +218,25 @@ public class BaseService<T> {
     /**
      * 根据 Wrapper 条件，查询总记录数
      */
-    public long count(Map<String, Object> queryWrapper) throws SQLException {
+    public long count(Map<String, Object> queryWrapper) {
         return dao.selectCount(queryWrapper);
     }
 
     /**
      * 查询列表
      */
-    public List<T> list(Map<String, Object> queryWrapper) throws SQLException {
-        return dao.selectByMap(queryWrapper);
+    public List<T> list(Map<String, Object> queryWrapper) {
+        try {
+            return dao.selectByMap(queryWrapper);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * 查询所有
      */
-    public List<T> list() throws SQLException {
+    public List<T> list() {
         return list(new HashMap<>());
     }
 
@@ -272,7 +276,7 @@ public class BaseService<T> {
     /**
      * 翻页查询
      *
-     * @param page         翻页对象
+     * @param page 翻页对象
      */
     public <E extends IPage<Map<String, Object>>> E pageMaps(E page, Map<String, Object> queryWrapper) {
         return dao.selectMapsPage(page, queryWrapper);

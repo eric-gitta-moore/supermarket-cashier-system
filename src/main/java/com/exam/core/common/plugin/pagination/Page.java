@@ -2,6 +2,8 @@ package com.exam.core.common.plugin.pagination;
 
 import com.exam.core.common.metadata.IPage;
 import com.exam.core.common.metadata.OrderItem;
+import lombok.Data;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -16,51 +18,74 @@ public class Page<T> implements IPage<T> {
     /**
      * 查询数据列表
      */
+    @Getter
     protected List<T> records = Collections.emptyList();
 
     /**
      * 总数
      */
+    @Getter
     protected long total = 0;
     /**
      * 每页显示条数，默认 10
      */
+    @Getter
     protected long size = 10;
 
     /**
      * 当前页
      */
+    @Getter
     protected long current = 1;
 
     /**
      * 排序字段信息
      */
     @Setter
+    @Getter
     protected List<OrderItem> orders = new ArrayList<>();
 
-    /**
-     * 自动优化 COUNT SQL
-     */
-    protected boolean optimizeCountSql = true;
     /**
      * 是否进行 count 查询
      */
     protected boolean searchCount = true;
-    /**
-     * {@link #optimizeJoinOfCountSql()}
-     */
-    @Setter
-    protected boolean optimizeJoinOfCountSql = true;
+
     /**
      * 单页分页条数限制
      */
     @Setter
+    @Getter
     protected Long maxLimit;
     /**
      * countId
      */
     @Setter
+    @Getter
     protected String countId;
+
+    @Override
+    public IPage<T> setTotal(long total) {
+        this.total = total;
+        return this;
+    }
+
+    @Override
+    public IPage<T> setCurrent(long current) {
+        this.current = current;
+        return this;
+    }
+
+    @Override
+    public IPage<T> setRecords(List<T> records) {
+        this.records = records;
+        return this;
+    }
+
+    @Override
+    public IPage<T> setSize(long size) {
+        this.size = size;
+        return this;
+    }
 
     public Page() {
     }
@@ -129,17 +154,7 @@ public class Page<T> implements IPage<T> {
 
     @Override
     public List<OrderItem> orders() {
-        return null;
-    }
-
-    @Override
-    public boolean optimizeCountSql() {
-        return IPage.super.optimizeCountSql();
-    }
-
-    @Override
-    public boolean optimizeJoinOfCountSql() {
-        return IPage.super.optimizeJoinOfCountSql();
+        return this.getOrders();
     }
 
     @Override
@@ -165,46 +180,6 @@ public class Page<T> implements IPage<T> {
     @Override
     public IPage<T> setPages(long pages) {
         return IPage.super.setPages(pages);
-    }
-
-    @Override
-    public List<T> getRecords() {
-        return null;
-    }
-
-    @Override
-    public IPage<T> setRecords(List<T> records) {
-        return null;
-    }
-
-    @Override
-    public long getTotal() {
-        return 0;
-    }
-
-    @Override
-    public IPage<T> setTotal(long total) {
-        return null;
-    }
-
-    @Override
-    public long getSize() {
-        return 0;
-    }
-
-    @Override
-    public IPage<T> setSize(long size) {
-        return null;
-    }
-
-    @Override
-    public long getCurrent() {
-        return 0;
-    }
-
-    @Override
-    public IPage<T> setCurrent(long current) {
-        return null;
     }
 
     @Override

@@ -21,8 +21,10 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
 
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append(stmt.toString()).append(" \nparams: [");
-        for (Object param : params) {
-            sqlBuilder.append(param).append(", ");
+        if (params != null) {
+            for (Object param : params) {
+                sqlBuilder.append(param).append(", ");
+            }
         }
         sqlBuilder.append("]");
         this.logger.info("Prepared statement: " + sqlBuilder.toString());
