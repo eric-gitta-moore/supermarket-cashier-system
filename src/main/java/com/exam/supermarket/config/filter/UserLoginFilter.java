@@ -1,6 +1,7 @@
-package com.exam.supermarket.config;
+package com.exam.supermarket.config.filter;
 
 import com.exam.supermarket.constant.SessionConstant;
+import com.exam.supermarket.po.UserPo;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,8 +45,8 @@ public class UserLoginFilter implements Filter {
         }
 
         HttpSession session = req.getSession();
-        String userId = (String) session.getAttribute(SessionConstant.USER_ID);
-        if (userId == null) {
+        UserPo userPo = (UserPo) session.getAttribute(SessionConstant.USER_INSTANCE);
+        if (userPo == null) {
             resp.sendRedirect("/login");
             return;
         }
