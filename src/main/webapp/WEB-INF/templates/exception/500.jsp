@@ -6,5 +6,6 @@
 </head>
 <body>
 500
+<jsp:include page="./common/stackTrace.jsp"/>
 </body>
 </html>
