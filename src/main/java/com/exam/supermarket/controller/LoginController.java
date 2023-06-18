@@ -4,8 +4,6 @@ import com.exam.core.base.controller.BaseController;
 import com.exam.supermarket.constant.SessionConstant;
 import com.exam.supermarket.po.UserPo;
 import com.exam.supermarket.service.UserService;
-import com.exam.supermarket.util.ActionDispatcherUtil;
-import com.exam.supermarket.util.AuthorActionDispatcherUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,16 +15,6 @@ import java.io.IOException;
 public class LoginController extends BaseController {
 
     private UserService userService = new UserService();
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        AuthorActionDispatcherUtil.actionDispatcher(this, req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.doGet(req, resp);
-    }
 
     protected void index(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("/WEB-INF/templates/login/login.jsp").forward(req, resp);
