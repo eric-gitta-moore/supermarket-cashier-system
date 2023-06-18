@@ -5,6 +5,7 @@ import com.exam.core.common.metadata.IPage;
 import com.exam.core.common.plugin.pagination.Page;
 import com.exam.supermarket.po.GoodPo;
 import com.exam.supermarket.service.GoodService;
+import com.exam.supermarket.util.ActionDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,20 +22,7 @@ public class IndexController extends BaseController {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String act = req.getParameter("act");
-        if ("delete".equals(act)) {
-            delete(req, resp);
-            return;
-        }
-        if ("add".equals(act)) {
-            add(req, resp);
-            return;
-        }
-        if ("save".equals(act)) {
-            save(req, resp);
-            return;
-        }
-        index(req, resp);
+        ActionDispatcher.actionDispatcher(this, req, resp);
     }
 
     @Override

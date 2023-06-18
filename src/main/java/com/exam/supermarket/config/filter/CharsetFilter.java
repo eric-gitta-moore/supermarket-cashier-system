@@ -1,11 +1,9 @@
 package com.exam.supermarket.config.filter;
 
 import jakarta.servlet.*;
-import jakarta.servlet.annotation.WebFilter;
 
 import java.io.IOException;
 
-@WebFilter("/*")
 public class CharsetFilter implements Filter {
 
     @Override
