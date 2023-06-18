@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%--@elvariable id="action" type="java.lang.String"--%>
+<%--@elvariable id="controllerPath" type="java.lang.String"--%>
 <html>
 <head>
     <title>首页</title>
@@ -24,9 +26,10 @@
                 <tbody>
                 <%--@elvariable id="goods" type="java.util.List<com.exam.supermarket.po.GoodPo>"--%>
                 <c:forEach items="${goods}" var="item">
-                    <%--@elvariable id="uri" type="java.lang.String"--%>
                     <%--@elvariable id="pageQuery" type="java.lang.String"--%>
-                    <form action="${uri}/?${pageQuery}&act=save&id=${item.id}" method="post">
+                    <form
+                            action="<c:url value="/${controllerPath}/save?${pageQuery}&id=${item.id}"/>"
+                            method="post">
                         <tr>
 
                             <th scope="row">${item.id}</th>
@@ -35,7 +38,7 @@
                                 <td>${item.price}</td>
                                 <td>${item.stock}</td>
                             </c:if>
-                            <c:if test="${param.act=='change' && param.id==item.id}">
+                            <c:if test="${action=='change' && param.id==item.id}">
                                 <td>
                                     <input class="form-control" type="text" name="name" value="${item.name}">
                                 </td>
@@ -56,13 +59,16 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item"
-                                                   href="${uri}?${pageQuery}&act=change&id=${item.id}">修改</a></li>
+                                                   href="<c:url value="/${controllerPath}/change?${pageQuery}&id=${item.id}"/>"
+                                            >修改</a>
+                                            </li>
                                             <li><a class="dropdown-item"
-                                                   href="${uri}?${pageQuery}&act=delete&id=${item.id}">删除</a></li>
+                                                   href="<c:url value="/${controllerPath}/delete?${pageQuery}&id=${item.id}"/>"
+                                            >删除</a></li>
                                         </ul>
                                     </div>
                                 </c:if>
-                                <c:if test="${param.act=='change' && param.id==item.id}">
+                                <c:if test="${action=='change' && param.id==item.id}">
                                     <div class="btn-group" role="group">
                                         <button type="button" class="btn btn-outline-success dropdown-toggle"
                                                 data-bs-toggle="dropdown"
@@ -73,7 +79,8 @@
                                             <li>
                                                 <button class="dropdown-item">保存</button>
                                             </li>
-                                            <li><a class="dropdown-item" href="${uri}?${pageQuery}">取消</a></li>
+                                            <li><a class="dropdown-item"
+                                                   href="<c:url value="/index?${pageQuery}"/>">取消</a></li>
                                         </ul>
                                     </div>
                                 </c:if>
@@ -86,7 +93,6 @@
             </table>
             <nav>
                 <%--@elvariable id="pagination" type="com.exam.core.common.metadata.IPage"--%>
-                <%--@elvariable id="uri" type="java.lang.String"--%>
                 <jsp:include page="../components/pagination.jsp">
                     <jsp:param name="total" value="${pagination.total}"/>
                     <jsp:param name="current" value="${pagination.current}"/>
@@ -96,7 +102,7 @@
                     <jsp:param name="showSize" value="3"/>
                     <jsp:param name="pageParamName" value="page"/>
                     <jsp:param name="sizeParamName" value="size"/>
-                    <jsp:param name="uri" value="${uri}"/>
+                    <jsp:param name="uri" value="/index"/>
                 </jsp:include>
             </nav>
         </div>

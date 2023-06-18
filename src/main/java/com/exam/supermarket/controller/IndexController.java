@@ -50,10 +50,11 @@ public class IndexController extends BaseController {
     }
 
     protected void add(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        if ("GET".equals(req.getMethod())) {
-            req.getRequestDispatcher("/WEB-INF/templates/index/add.jsp").forward(req, resp);
-            return;
-        }
+        req.getRequestDispatcher("/WEB-INF/templates/index/add.jsp").forward(req, resp);
+    }
+
+    protected void change(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        this.index(req, resp);
     }
 
     protected void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {

@@ -31,6 +31,11 @@ public class ActionDispatcher {
                     pathInfo.getController(),
                     pathInfo.getAction())
             );
+            req.setAttribute("controllerPath",
+                String.format("%s/%s",
+                    pathInfo.getModule(),
+                    pathInfo.getController())
+            );
 
             Method[] declaredMethods = clazz.getClass().getDeclaredMethods();
             boolean isMethodExist = Arrays.stream(declaredMethods)
