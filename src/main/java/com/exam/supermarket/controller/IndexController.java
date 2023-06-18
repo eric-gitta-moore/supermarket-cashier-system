@@ -14,6 +14,8 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet({"/index", "/index/*"})
 public class IndexController extends BaseController {
@@ -50,6 +52,11 @@ public class IndexController extends BaseController {
     }
 
     protected void add(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Map<String, String> fields = new HashMap<>();
+        fields.put("name", "商品名");
+        fields.put("stock", "库存");
+        fields.put("price", "价格");
+        req.setAttribute("fields", fields);
         req.getRequestDispatcher("/WEB-INF/templates/index/add.jsp").forward(req, resp);
     }
 
@@ -62,8 +69,7 @@ public class IndexController extends BaseController {
         resp.sendRedirect(req.getServletPath());
     }
 
-    protected void save(HttpServletRequest req, HttpServletResponse resp)
-        throws IOException {
+    protected void save(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         GoodPo goodPo = new GoodPo();
         try {
             BeanUtils.populate(goodPo, req.getParameterMap());
@@ -72,7 +78,7 @@ public class IndexController extends BaseController {
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         }
-        this.goodService.updateById(goodPo);
+        this.goodService.saveOrUpdate(goodPo);
         resp.sendRedirect(req.getServletPath());
     }
 }

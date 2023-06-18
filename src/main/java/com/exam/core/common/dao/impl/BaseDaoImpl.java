@@ -6,6 +6,7 @@ import com.exam.core.common.util.ClassFieldUtil;
 import com.exam.core.common.util.GenericsUtils;
 import com.exam.core.common.util.SqlUtil;
 import com.exam.supermarket.util.DbPoolUtil;
+import lombok.Getter;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -19,7 +20,10 @@ import java.util.stream.Collectors;
 
 public class BaseDaoImpl<T> implements BaseDao<T> {
 
+    @Getter
     protected String table;
+
+    @Getter
     protected String idField = "id";
 
     private QueryRunner runner;
@@ -31,7 +35,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     @Override
     public T insert(T entity) throws SQLException {
         Map<String, Object> entityFieldMap = ClassFieldUtil.getFields(entity);
-        entityFieldMap.remove("id");
+        entityFieldMap.remove(this.idField);
         String sql = String.format("insert into %s (%s) values (%s)",
             this.table,
             String.join(",", entityFieldMap.keySet()),
