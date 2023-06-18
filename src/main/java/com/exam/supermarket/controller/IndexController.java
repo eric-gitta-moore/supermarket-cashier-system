@@ -18,7 +18,6 @@ public class IndexController extends BaseController<GoodPo> {
     public IndexController() {
         this.setService(new GoodService());
         this.setNoNeedLogin(new String[]{"index"});
-        this.setNoNeedRight(new String[]{"add", "change", "delete", "save"});
     }
 
 
