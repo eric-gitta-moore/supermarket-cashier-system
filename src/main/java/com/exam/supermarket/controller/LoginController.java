@@ -20,6 +20,11 @@ public class LoginController extends BaseController {
         req.getRequestDispatcher("/WEB-INF/templates/login/login.jsp").forward(req, resp);
     }
 
+    protected void logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getSession().removeAttribute(SessionConstant.USER_INSTANCE);
+        resp.sendRedirect("/login");
+    }
+
     protected void login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
