@@ -25,7 +25,8 @@
                         </div>
                     </c:forEach>
                     <div class="d-flex mb-3 justify-content-end">
-                        <button class="btn btn-outline-success">保存</button>
+                        <button class="btn btn-success mx-3">保存</button>
+                        <a class="btn btn-outline-primary" href="javascript:history.back()">返回</a>
                     </div>
                 </form>
             </div>
