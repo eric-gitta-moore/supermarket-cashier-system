@@ -14,8 +14,11 @@ import java.io.IOException;
 @WebServlet({"/login", "/login/*"})
 public class LoginController extends BaseController {
 
-    private UserService userService = new UserService();
+    public LoginController() {
+        this.setService(new UserService());
+    }
 
+    @Override
     protected void index(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("/WEB-INF/templates/login/login.jsp").forward(req, resp);
     }
@@ -28,7 +31,7 @@ public class LoginController extends BaseController {
     protected void login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
-        UserPo userPo = userService.login(username, password);
+        UserPo userPo = ((UserService) this.getService()).login(username, password);
         if (userPo != null) {
             req.getSession().setAttribute(SessionConstant.USER_INSTANCE, userPo);
             resp.sendRedirect("/index");
