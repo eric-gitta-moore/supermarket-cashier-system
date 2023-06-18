@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -38,7 +39,7 @@ public class ActionDispatcherUtil {
     public static <T extends HttpServlet> void dispatch(PathInfo pathInfo, T clazz, HttpServletRequest req,
         HttpServletResponse resp) {
         try {
-            Set<Method> methodSet = new HashSet<>();
+            Set<Method> methodSet = new LinkedHashSet<>();
             methodSet.addAll(Arrays.asList(clazz.getClass().getDeclaredMethods()));
             methodSet.addAll(Arrays.asList(clazz.getClass().getSuperclass().getDeclaredMethods()));
 
@@ -57,7 +58,7 @@ public class ActionDispatcherUtil {
                         return false;
                     }
                     return true;
-                }).findAny().orElse(null);
+                }).findFirst().orElse(null);
             if (method == null) {
 //                throw new DispatchException("请求转发错误");
                 throw new DispatchException("Request forwarding error");

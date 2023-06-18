@@ -27,8 +27,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <%--@elvariable id="goods" type="java.util.List<com.exam.supermarket.po.GoodPo>"--%>
-                <c:forEach items="${goods}" var="item">
+                <%--@elvariable id="records" type="java.util.List<com.exam.supermarket.po.UserPo>"--%>
+                <c:forEach items="${records}" var="item">
                     <%--@elvariable id="pageQuery" type="java.lang.String"--%>
                     <form
                             action="<c:url value="/${controllerPath}/save?${pageQuery}&id=${item.id}"/>"
@@ -36,9 +36,10 @@
                         <tr>
 
                             <th scope="row">${item.id}</th>
+                            <td>${item.username}</td>
                             <td>${item.name}</td>
-                            <td>${item.price}</td>
-                            <td>${item.stock}</td>
+                            <td>${item.role}</td>
+                            <td>${item.vip}</td>
 
                                 <%-- 操作 --%>
                             <c:if test="${userInstance.role=='admin'}">
