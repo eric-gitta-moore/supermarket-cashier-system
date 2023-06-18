@@ -1,6 +1,6 @@
 package com.exam.supermarket.controller;
 
-import com.exam.core.base.controller.BaseServlet;
+import com.exam.core.base.controller.BaseController;
 import com.exam.core.common.metadata.IPage;
 import com.exam.core.common.plugin.pagination.Page;
 import com.exam.supermarket.dao.GoodDao;
@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 @WebServlet("/test")
-public class TestServlet extends BaseServlet {
+public class TestController extends BaseController {
 
     private GoodDao goodDao = new GoodDao();
 

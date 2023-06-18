@@ -3,15 +3,15 @@
 <html>
 <head>
     <title>登录</title>
-    <jsp:include page="./common/head.jsp"/>
-    <jsp:include page="./common/static.jsp"/>
+    <jsp:include page="../common/head.jsp"/>
+    <jsp:include page="../common/static.jsp"/>
 </head>
 <body>
-<jsp:include page="./common/header.jsp"/>
+<jsp:include page="../common/header.jsp"/>
 <div class="container mt-3 ">
     <div class="row justify-content-center">
         <div class="col-6">
-            <form action="<c:url value="/login"/>" method="post">
+            <form action="<c:url value="/login/login"/>" method="post">
                 <c:if test="${msg!=null}">
                     <div class="alert alert-${alertLevel}" role="alert">${msg}</div>
                 </c:if>
@@ -32,6 +32,6 @@
         </div>
     </div>
 </div>
-<jsp:include page="./common/footer.jsp"/>
+<jsp:include page="../common/footer.jsp"/>
 </body>
 </html>
