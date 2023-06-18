@@ -27,8 +27,12 @@ public class BaseService<T> {
      *
      * @param entity 实体对象
      */
-    public T save(T entity) throws SQLException {
-        return dao.insert(entity);
+    public T save(T entity) {
+        try {
+            return dao.insert(entity);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -76,8 +80,12 @@ public class BaseService<T> {
      *
      * @param id 主键ID
      */
-    public boolean removeById(Serializable id) throws SQLException {
-        return dao.deleteById(id) > 0;
+    public boolean removeById(Serializable id) {
+        try {
+            return dao.deleteById(id) > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -86,8 +94,12 @@ public class BaseService<T> {
      * @param entity 实体
      * @since 3.4.4
      */
-    public boolean removeById(T entity) throws SQLException {
-        return dao.deleteById(entity) > 0;
+    public boolean removeById(T entity) {
+        try {
+            return dao.deleteById(entity) > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -124,7 +136,7 @@ public class BaseService<T> {
      *
      * @param entity 实体对象
      */
-    public boolean updateById(T entity) throws SQLException {
+    public boolean updateById(T entity)  {
         return dao.updateById(entity) > 0;
     }
 
