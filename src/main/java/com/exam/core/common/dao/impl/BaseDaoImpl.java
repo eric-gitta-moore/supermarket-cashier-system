@@ -73,12 +73,12 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     }
 
     @Override
-    public int updateById(T entity) throws SQLException {
+    public int updateById(T entity) {
         return update(entity, new HashMap<>());
     }
 
     @Override
-    public int update(T entity, Map<String, Object> columnMap) throws SQLException {
+    public int update(T entity, Map<String, Object> columnMap) {
         Object id;
         Map<String, Object> entityFieldMap = ClassFieldUtil.getFields(entity);
         if (columnMap.containsKey(this.idField)) {
@@ -94,7 +94,11 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
             this.idField);
         List<Object> params = new ArrayList<>(entityFieldMap.values());
         params.add(id);
-        return this.runner.update(sql, params.toArray());
+        try {
+            return this.runner.update(sql, params.toArray());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

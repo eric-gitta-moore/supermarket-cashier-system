@@ -18,22 +18,75 @@
                     <th scope="col">商品名</th>
                     <th scope="col">价格</th>
                     <th scope="col">库存</th>
+                    <th scope="col">操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 <%--@elvariable id="goods" type="java.util.List<com.exam.supermarket.po.GoodPo>"--%>
                 <c:forEach items="${goods}" var="item">
-                    <tr>
-                        <th scope="row">${item.id}</th>
-                        <td>${item.name}</td>
-                        <td>${item.price}</td>
-                        <td>${item.stock}</td>
-                    </tr>
+                    <%--@elvariable id="uri" type="java.lang.String"--%>
+                    <%--@elvariable id="pageQuery" type="java.lang.String"--%>
+                    <form action="${uri}?${pageQuery}&act=save&id=${item.id}" method="post">
+                        <tr>
+
+                            <th scope="row">${item.id}</th>
+                            <c:if test="${param.id!=item.id}">
+                                <td>${item.name}</td>
+                                <td>${item.price}</td>
+                                <td>${item.stock}</td>
+                            </c:if>
+                            <c:if test="${param.act=='change' && param.id==item.id}">
+                                <td>
+                                    <input class="form-control" type="text" name="name" value="${item.name}">
+                                </td>
+                                <td>
+                                    <input class="form-control" type="text" name="price" value="${item.price}">
+                                </td>
+                                <td>
+                                    <input class="form-control" type="text" name="stock" value="${item.stock}">
+                                </td>
+                            </c:if>
+                            <td>
+                                <c:if test="${param.id!=item.id}">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-primary dropdown-toggle"
+                                                data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                            操作
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item"
+                                                   href="${uri}?${pageQuery}&act=change&id=${item.id}">修改</a></li>
+                                            <li><a class="dropdown-item"
+                                                   href="${uri}?${pageQuery}&act=delete&id=${item.id}">删除</a></li>
+                                        </ul>
+                                    </div>
+                                </c:if>
+                                <c:if test="${param.act=='change' && param.id==item.id}">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-outline-success dropdown-toggle"
+                                                data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                            操作
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <button class="dropdown-item">保存</button>
+                                            </li>
+                                            <li><a class="dropdown-item" href="${uri}?${pageQuery}">取消</a></li>
+                                        </ul>
+                                    </div>
+                                </c:if>
+                            </td>
+
+                        </tr>
+                    </form>
                 </c:forEach>
                 </tbody>
             </table>
             <nav>
                 <%--@elvariable id="pagination" type="com.exam.core.common.metadata.IPage"--%>
+                <%--@elvariable id="uri" type="java.lang.String"--%>
                 <jsp:include page="./components/pagination.jsp">
                     <jsp:param name="total" value="${pagination.total}"/>
                     <jsp:param name="current" value="${pagination.current}"/>
