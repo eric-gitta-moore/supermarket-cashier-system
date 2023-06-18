@@ -5,7 +5,8 @@ import com.exam.core.common.metadata.IPage;
 import com.exam.core.common.plugin.pagination.Page;
 import com.exam.supermarket.po.GoodPo;
 import com.exam.supermarket.service.GoodService;
-import com.exam.supermarket.util.ActionDispatcher;
+import com.exam.supermarket.util.ActionDispatcherUtil;
+import com.exam.supermarket.util.AuthorActionDispatcherUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,9 +23,14 @@ public class IndexController extends BaseController {
 
     private GoodService goodService = new GoodService();
 
+    public IndexController() {
+        this.setNoNeedLogin(new String[]{"index"});
+        this.setNoNeedRight(new String[]{"add", "change", "delete", "save"});
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ActionDispatcher.actionDispatcher(this, req, resp);
+        AuthorActionDispatcherUtil.actionDispatcher(this, req, resp);
     }
 
     @Override

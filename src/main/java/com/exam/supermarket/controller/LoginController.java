@@ -4,7 +4,8 @@ import com.exam.core.base.controller.BaseController;
 import com.exam.supermarket.constant.SessionConstant;
 import com.exam.supermarket.po.UserPo;
 import com.exam.supermarket.service.UserService;
-import com.exam.supermarket.util.ActionDispatcher;
+import com.exam.supermarket.util.ActionDispatcherUtil;
+import com.exam.supermarket.util.AuthorActionDispatcherUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +20,7 @@ public class LoginController extends BaseController {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ActionDispatcher.actionDispatcher(this, req, resp);
+        AuthorActionDispatcherUtil.actionDispatcher(this, req, resp);
     }
 
     @Override
