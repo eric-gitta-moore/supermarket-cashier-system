@@ -33,6 +33,7 @@
                     <a class="nav-link disabled">Disabled</a>
                 </li>
             </ul>
+            <a href="<c:url value="/login/logout"/>" class="btn btn-info">退出登录</a>
         </div>
     </div>
 </nav>
