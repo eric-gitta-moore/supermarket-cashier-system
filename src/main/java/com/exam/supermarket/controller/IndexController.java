@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @WebServlet({"/index", "/index/*"})
@@ -23,7 +24,7 @@ public class IndexController extends BaseController<GoodPo> {
 
     @Override
     protected void add(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Map<String, String> fields = new HashMap<>();
+        Map<String, String> fields = new LinkedHashMap<>();
         fields.put("name", "商品名");
         fields.put("stock", "库存");
         fields.put("price", "价格");
