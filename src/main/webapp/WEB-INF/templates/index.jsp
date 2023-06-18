@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="userInstance" scope="session" type="com.exam.supermarket.po.UserPo"/>
 <html>
 <head>
     <title>首页</title>
@@ -16,39 +15,36 @@
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col">商品名</th>
+                    <th scope="col">价格</th>
+                    <th scope="col">库存</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td colspan="2">Larry the Bird</td>
-                    <td>@twitter</td>
-                </tr>
+                <%--@elvariable id="goods" type="java.util.List<com.exam.supermarket.po.GoodPo>"--%>
+                <c:forEach items="${goods}" var="item">
+                    <tr>
+                        <th scope="row">${item.id}</th>
+                        <td>${item.name}</td>
+                        <td>${item.price}</td>
+                        <td>${item.stock}</td>
+                    </tr>
+                </c:forEach>
                 </tbody>
             </table>
             <nav>
-                <ul class="pagination justify-content-center">
-                    <li class="page-item disabled"><a class="page-link" href="#">上一页</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">下一页</a></li>
-                </ul>
+                <%--@elvariable id="pagination" type="com.exam.core.common.metadata.IPage"--%>
+                <jsp:include page="./components/pagination.jsp">
+                    <jsp:param name="total" value="${pagination.total}"/>
+                    <jsp:param name="current" value="${pagination.current}"/>
+                    <jsp:param name="pages" value="${pagination.pages}"/>
+                    <jsp:param name="size" value="${pagination.size}"/>
+                    <jsp:param name="hasWapper" value="${true}"/>
+                    <jsp:param name="showSize" value="3"/>
+                    <jsp:param name="pageParamName" value="page"/>
+                    <jsp:param name="sizeParamName" value="size"/>
+                    <jsp:param name="uri" value="${uri}"/>
+                </jsp:include>
             </nav>
         </div>
 
@@ -58,6 +54,7 @@
                     我的
                 </div>
                 <div class="card-body">
+                    <%--@elvariable id="userInstance" type="com.exam.supermarket.po.UserPo"--%>
                     用户名：${userInstance.username}
                 </div>
             </div>

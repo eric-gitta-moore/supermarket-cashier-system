@@ -21,6 +21,7 @@ public class UserLoginFilter implements Filter {
         throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
+        req.setAttribute("uri", req.getRequestURI());
         List<String> permitSuffixList = Arrays.asList(
                 ".css",
                 ".js",
