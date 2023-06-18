@@ -2,9 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>400</title>
+    <title>404</title>
 </head>
 <body>
-400
+404
+<jsp:include page="./common/stackTrace.jsp"/>
 </body>
 </html>
