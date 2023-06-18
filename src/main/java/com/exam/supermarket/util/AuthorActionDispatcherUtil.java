@@ -45,7 +45,7 @@ public class AuthorActionDispatcherUtil extends ActionDispatcherUtil {
             return true;
         }
 
-        UserPo userPo = (UserPo) req.getAttribute(SessionConstant.USER_INSTANCE);
+        UserPo userPo = (UserPo) req.getSession().getAttribute(SessionConstant.USER_INSTANCE);
 
         if (noNeedLogin.contains(pathInfo.getAction())) {
             // 允许匿名
@@ -55,7 +55,7 @@ public class AuthorActionDispatcherUtil extends ActionDispatcherUtil {
             return userPo != null;
         } else {
             // 需要鉴权
-            return RoleEnum.ADMIN.toString().equals(userPo.getRole());
+            return RoleEnum.ADMIN.getValue().equals(userPo.getRole());
         }
     }
 
