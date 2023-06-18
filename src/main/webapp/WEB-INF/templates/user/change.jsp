@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>新增</title>
+    <title>修改</title>
     <jsp:include page="../common/head.jsp"/>
     <jsp:include page="../common/static.jsp"/>
 </head>
@@ -13,14 +13,23 @@
     <div class="row justify-content-center">
         <div class="col-9">
             <div class="card">
-                <div class="card-header">新增</div>
+                <div class="card-header">修改</div>
                 <form class="card-body" action="/${pathInfo.module}/${pathInfo.controller}/save" method="post">
                     <%--@elvariable id="fields" type="java.util.Map"--%>
+                    <%--@elvariable id="record" type="java.util.Map"--%>
+                    <div class="row mb-3">
+                        <label for="id" class="col-sm-2 col-form-label">ID</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="id" name="id"
+                                   value="${record.get('id')}" readonly>
+                        </div>
+                    </div>
                     <c:forEach items="${fields}" var="item">
                         <div class="row mb-3">
                             <label for="${item.key}" class="col-sm-2 col-form-label">${item.value}</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="${item.key}" name="${item.key}">
+                                <input type="text" class="form-control" id="${item.key}" name="${item.key}"
+                                       value="${record.get(item.key)}">
                             </div>
                         </div>
                     </c:forEach>

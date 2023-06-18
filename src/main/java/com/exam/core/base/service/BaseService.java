@@ -197,7 +197,7 @@ public class BaseService<T> {
      *
      * @param id 主键ID
      */
-    public T getById(Serializable id) throws SQLException {
+    public T getById(Serializable id)  {
         return dao.selectById(id);
     }
 

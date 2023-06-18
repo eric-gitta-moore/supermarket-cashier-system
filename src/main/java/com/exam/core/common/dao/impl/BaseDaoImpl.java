@@ -106,10 +106,15 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     }
 
     @Override
-    public T selectById(Serializable id) throws SQLException {
+    public T selectById(Serializable id) {
         String sql = "select * from " + this.table + " where " + this.idField + "=?";
         Class<T> tClass = GenericsUtils.getSuperClassGenericType(this.getClass());
-        T poList = runner.query(sql, new BeanHandler<>(tClass), id);
+        T poList = null;
+        try {
+            poList = runner.query(sql, new BeanHandler<>(tClass), id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return poList;
     }
 

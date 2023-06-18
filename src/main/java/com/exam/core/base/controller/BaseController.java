@@ -1,10 +1,11 @@
 package com.exam.core.base.controller;
 
 import com.exam.core.base.service.BaseService;
-import com.exam.core.common.exception.SystemException;
 import com.exam.core.common.metadata.IPage;
+import com.exam.core.common.metadata.PathInfo;
 import com.exam.core.common.plugin.pagination.Page;
 import com.exam.core.common.util.GenericsUtils;
+import com.exam.core.common.util.UrlUtil;
 import com.exam.supermarket.util.AuthorActionDispatcherUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -16,6 +17,8 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class BaseController<T> extends HttpServlet {
 
@@ -31,7 +34,13 @@ public class BaseController<T> extends HttpServlet {
     @Setter
     private BaseService<T> service;
 
+    private String templatePath;
+    private PathInfo pathInfo;
+
     protected void dispatch(HttpServletRequest req, HttpServletResponse resp) {
+        this.pathInfo = UrlUtil.parsePathInfo(req.getRequestURI());
+        this.templatePath = String.format("/WEB-INF/templates/%s", this.pathInfo.getController());
+        req.setAttribute("pathInfo", this.pathInfo);
         AuthorActionDispatcherUtil.actionDispatcher(this, req, resp);
     }
 
@@ -59,22 +68,41 @@ public class BaseController<T> extends HttpServlet {
         IPage<T> pagination = new Page<>(page, Math.min(10, size));
         this.service.page(pagination);
         req.setAttribute("pagination", pagination);
-        req.setAttribute("goods", pagination.getRecords());
+        req.setAttribute("records", pagination.getRecords());
         req.setAttribute("pageQuery", String.format("page=%d&size=%d", page, size));
-        req.getRequestDispatcher("/WEB-INF/templates/index/index.jsp").forward(req, resp);
+        req.setAttribute("fields", this.getIndexFields(req, resp));
+        req.getRequestDispatcher(String.format("%s/index.jsp", this.templatePath)).forward(req, resp);
     }
 
     protected void add(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        throw new SystemException("无实现方法");
+        req.setAttribute("fields", getUpdateFields(req, resp));
+        req.getRequestDispatcher(String.format("%s/add.jsp", this.templatePath)).forward(req, resp);
     }
 
     protected void change(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        this.index(req, resp);
+        T po = this.service.getById(req.getParameter("id"));
+        Map<String, String> record = null;
+        try {
+            record = BeanUtils.describe(po);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+        req.setAttribute("record", record);
+        req.setAttribute("fields", getUpdateFields(req, resp));
+        req.getRequestDispatcher(String.format("%s/change.jsp", this.templatePath)).forward(req, resp);
+    }
+
+    protected void sendRedirectHome(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.sendRedirect(String.format("/%s", this.pathInfo.getController()));
     }
 
     protected void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         this.service.removeById(req.getParameter("id"));
-        resp.sendRedirect(req.getServletPath());
+        this.sendRedirectHome(req, resp);
     }
 
     protected void save(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -99,6 +127,15 @@ public class BaseController<T> extends HttpServlet {
             throw new RuntimeException(e);
         }
         this.service.saveOrUpdate(po);
-        resp.sendRedirect(req.getServletPath());
+        this.sendRedirectHome(req, resp);
     }
+
+    protected Map<String, String> getUpdateFields(HttpServletRequest req, HttpServletResponse resp) {
+        return new LinkedHashMap<>();
+    }
+
+    protected Map<String, String> getIndexFields(HttpServletRequest req, HttpServletResponse resp) {
+        return new LinkedHashMap<>();
+    }
+
 }
