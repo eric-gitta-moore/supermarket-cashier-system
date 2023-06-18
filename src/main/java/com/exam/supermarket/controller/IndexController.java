@@ -1,6 +1,6 @@
 package com.exam.supermarket.controller;
 
-import com.exam.core.base.controller.BaseServlet;
+import com.exam.core.base.controller.BaseController;
 import com.exam.core.common.metadata.IPage;
 import com.exam.core.common.plugin.pagination.Page;
 import com.exam.supermarket.po.GoodPo;
@@ -9,15 +9,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import net.sf.cglib.beans.BeanCopier;
 import org.apache.commons.beanutils.BeanUtils;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 
-@WebServlet("/index")
-public class IndexServlet extends BaseServlet {
+@WebServlet({"/index", "/index/*"})
+public class IndexController extends BaseController {
 
     private GoodService goodService = new GoodService();
 
@@ -28,7 +26,23 @@ public class IndexServlet extends BaseServlet {
             delete(req, resp);
             return;
         }
+        if ("add".equals(act)) {
+            add(req, resp);
+            return;
+        }
+        if ("save".equals(act)) {
+            save(req, resp);
+            return;
+        }
+        index(req, resp);
+    }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+
+    protected void index(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Integer page = 1;
         Integer size = 10;
         try {
@@ -39,19 +53,18 @@ public class IndexServlet extends BaseServlet {
             return;
         }
 
-        IPage pagination = new Page(page, Math.min(20, size));
+        IPage<GoodPo> pagination = new Page<>(page, Math.min(10, size));
         goodService.page(pagination);
         req.setAttribute("pagination", pagination);
         req.setAttribute("goods", pagination.getRecords());
         req.setAttribute("pageQuery", String.format("page=%d&size=%d", page, size));
-        req.getRequestDispatcher("/WEB-INF/templates/index.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/templates/index/index.jsp").forward(req, resp);
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String act = req.getParameter("act");
-        if ("save".equals(act)) {
-            save(req, resp);
+    protected void add(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        if ("GET".equals(req.getMethod())) {
+            req.getRequestDispatcher("/WEB-INF/templates/index/add.jsp").forward(req, resp);
+            return;
         }
     }
 

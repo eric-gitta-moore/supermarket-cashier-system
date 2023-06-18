@@ -1,9 +1,10 @@
 package com.exam.supermarket.controller;
 
-import com.exam.core.base.controller.BaseServlet;
+import com.exam.core.base.controller.BaseController;
 import com.exam.supermarket.constant.SessionConstant;
 import com.exam.supermarket.po.UserPo;
 import com.exam.supermarket.service.UserService;
+import com.exam.supermarket.util.ActionDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,18 +12,26 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet("/login")
-public class LoginServlet extends BaseServlet {
+@WebServlet({"/login", "/login/*"})
+public class LoginController extends BaseController {
 
     private UserService userService = new UserService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/templates/login.jsp").forward(req, resp);
+        ActionDispatcher.actionDispatcher(this, req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        this.doGet(req, resp);
+    }
+
+    protected void index(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/templates/login/login.jsp").forward(req, resp);
+    }
+
+    protected void login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         UserPo userPo = userService.login(username, password);
@@ -35,4 +44,5 @@ public class LoginServlet extends BaseServlet {
             doGet(req, resp);
         }
     }
+
 }

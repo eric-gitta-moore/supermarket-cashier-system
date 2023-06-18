@@ -38,6 +38,7 @@ public class UserLoginFilter implements Filter {
 
         List<String> permitUrl = Arrays.asList(
                 "/login",
+                "/login/login",
                 "/test"
         );
         if (permitUrl.contains(req.getRequestURI())) {

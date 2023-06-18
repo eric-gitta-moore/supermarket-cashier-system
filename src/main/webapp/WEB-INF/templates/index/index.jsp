@@ -3,11 +3,11 @@
 <html>
 <head>
     <title>首页</title>
-    <jsp:include page="./common/head.jsp"/>
-    <jsp:include page="./common/static.jsp"/>
+    <jsp:include page="../common/head.jsp"/>
+    <jsp:include page="../common/static.jsp"/>
 </head>
 <body>
-<jsp:include page="./common/header.jsp"/>
+<jsp:include page="../common/header.jsp"/>
 <div class="container mt-3">
     <div class="row">
         <div class="col-9">
@@ -26,7 +26,7 @@
                 <c:forEach items="${goods}" var="item">
                     <%--@elvariable id="uri" type="java.lang.String"--%>
                     <%--@elvariable id="pageQuery" type="java.lang.String"--%>
-                    <form action="${uri}?${pageQuery}&act=save&id=${item.id}" method="post">
+                    <form action="${uri}/?${pageQuery}&act=save&id=${item.id}" method="post">
                         <tr>
 
                             <th scope="row">${item.id}</th>
@@ -87,7 +87,7 @@
             <nav>
                 <%--@elvariable id="pagination" type="com.exam.core.common.metadata.IPage"--%>
                 <%--@elvariable id="uri" type="java.lang.String"--%>
-                <jsp:include page="./components/pagination.jsp">
+                <jsp:include page="../components/pagination.jsp">
                     <jsp:param name="total" value="${pagination.total}"/>
                     <jsp:param name="current" value="${pagination.current}"/>
                     <jsp:param name="pages" value="${pagination.pages}"/>
@@ -104,6 +104,14 @@
         <div class="col-3">
             <div class="card ">
                 <div class="card-header">
+                    操作
+                </div>
+                <div class="card-body">
+                    <a class="btn btn-success" href="${uri}/login">新增</a>
+                </div>
+            </div>
+            <div class="card mt-3">
+                <div class="card-header">
                     我的
                 </div>
                 <div class="card-body">
@@ -114,6 +122,6 @@
         </div>
     </div>
 </div>
-<jsp:include page="./common/footer.jsp"/>
+<jsp:include page="../common/footer.jsp"/>
 </body>
 </html>
