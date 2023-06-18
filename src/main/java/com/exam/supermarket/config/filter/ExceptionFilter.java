@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -33,6 +34,7 @@ public class ExceptionFilter implements Filter {
             chain.doFilter(request, response);
         } catch (SystemException e) {
             resp.sendError(e.getStatusCode());
+            e.printStackTrace();
 
             if (isDebug) {
                 req.setAttribute("stackTrace", ExceptionUtils.getStackTrace(e));
