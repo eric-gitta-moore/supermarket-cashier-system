@@ -1,3 +1,4 @@
+<%--@elvariable id="controllerPath" type="java.lang.String"--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -9,59 +10,25 @@
 <body>
 <jsp:include page="../common/header.jsp"/>
 <div class="container mt-3">
-    <div class="row">
+    <div class="row justify-content-center">
         <div class="col-9">
-            <form>
-                <div class="row mb-3">
-                    <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
-                    <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail3">
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
-                    <div class="col-sm-10">
-                        <input type="password" class="form-control" id="inputPassword3">
-                    </div>
-                </div>
-                <fieldset class="row mb-3">
-                    <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
-                    <div class="col-sm-10">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1"
-                                   value="option1" checked>
-                            <label class="form-check-label" for="gridRadios1">
-                                First radio
-                            </label>
+            <div class="card">
+                <div class="card-header">新增</div>
+                <form class="card-body" action="/${controllerPath}/save" method="post">
+                    <%--@elvariable id="fields" type="java.util.HashMap"--%>
+                    <c:forEach items="${fields}" var="item">
+                        <div class="row mb-3">
+                            <label for="${item.key}" class="col-sm-2 col-form-label">${item.value}</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="${item.key}" name="${item.key}">
+                            </div>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2"
-                                   value="option2">
-                            <label class="form-check-label" for="gridRadios2">
-                                Second radio
-                            </label>
-                        </div>
-                        <div class="form-check disabled">
-                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3"
-                                   value="option3" disabled>
-                            <label class="form-check-label" for="gridRadios3">
-                                Third disabled radio
-                            </label>
-                        </div>
+                    </c:forEach>
+                    <div class="d-flex mb-3 justify-content-end">
+                        <button class="btn btn-outline-success">保存</button>
                     </div>
-                </fieldset>
-                <div class="row mb-3">
-                    <div class="col-sm-10 offset-sm-2">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="gridCheck1">
-                            <label class="form-check-label" for="gridCheck1">
-                                Example checkbox
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Sign in</button>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </div>

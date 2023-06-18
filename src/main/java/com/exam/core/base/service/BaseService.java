@@ -2,7 +2,9 @@ package com.exam.core.base.service;
 
 import com.exam.core.base.dao.BaseDao;
 import com.exam.core.common.metadata.IPage;
+import com.exam.core.common.util.ClassFieldUtil;
 import com.exam.core.common.util.GenericsUtils;
+import org.apache.commons.beanutils.BeanUtils;
 
 import java.io.Serializable;
 import java.sql.SQLException;
@@ -28,6 +30,20 @@ public class BaseService<T> {
      * @param entity 实体对象
      */
     public T save(T entity) {
+        try {
+            return dao.insert(entity);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public T saveOrUpdate(T entity) {
+        Map<String, Object> fields = ClassFieldUtil.getFields(entity);
+        if (fields.containsKey(dao.getIdField())) {
+            // 更新
+            return dao.updateById(entity) > 0 ? entity : null;
+        }
+        // 新增
         try {
             return dao.insert(entity);
         } catch (SQLException e) {
@@ -136,7 +152,7 @@ public class BaseService<T> {
      *
      * @param entity 实体对象
      */
-    public boolean updateById(T entity)  {
+    public boolean updateById(T entity) {
         return dao.updateById(entity) > 0;
     }
 

@@ -13,7 +13,7 @@
 <div class="container mt-3">
     <div class="row">
         <div class="col-9">
-            <table class="table">
+            <table class="table align-middle">
                 <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -113,7 +113,7 @@
                     操作
                 </div>
                 <div class="card-body">
-                    <a class="btn btn-success" href="${uri}/login">新增</a>
+                    <a class="btn btn-success" href="/${controllerPath}/add">新增</a>
                 </div>
             </div>
             <div class="card mt-3">
