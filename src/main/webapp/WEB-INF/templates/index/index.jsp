@@ -20,7 +20,9 @@
                     <th scope="col">商品名</th>
                     <th scope="col">价格</th>
                     <th scope="col">库存</th>
-                    <th scope="col">操作</th>
+                    <c:if test="${userInstance.role=='admin'}">
+                        <th scope="col">操作</th>
+                    </c:if>
                 </tr>
                 </thead>
                 <tbody>
@@ -49,42 +51,46 @@
                                     <input class="form-control" type="text" name="stock" value="${item.stock}">
                                 </td>
                             </c:if>
-                            <td>
-                                <c:if test="${param.id!=item.id}">
-                                    <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-primary dropdown-toggle"
-                                                data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                            操作
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item"
-                                                   href="<c:url value="/${controllerPath}/change?${pageQuery}&id=${item.id}"/>"
-                                            >修改</a>
-                                            </li>
-                                            <li><a class="dropdown-item"
-                                                   href="<c:url value="/${controllerPath}/delete?${pageQuery}&id=${item.id}"/>"
-                                            >删除</a></li>
-                                        </ul>
-                                    </div>
-                                </c:if>
-                                <c:if test="${action=='change' && param.id==item.id}">
-                                    <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-outline-success dropdown-toggle"
-                                                data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                            操作
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <button class="dropdown-item">保存</button>
-                                            </li>
-                                            <li><a class="dropdown-item"
-                                                   href="<c:url value="/index?${pageQuery}"/>">取消</a></li>
-                                        </ul>
-                                    </div>
-                                </c:if>
-                            </td>
+
+                                <%-- 操作 --%>
+                            <c:if test="${userInstance.role=='admin'}">
+                                <td>
+                                    <c:if test="${param.id!=item.id}">
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-primary dropdown-toggle"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                操作
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item"
+                                                       href="<c:url value="/${controllerPath}/change?${pageQuery}&id=${item.id}"/>"
+                                                >修改</a>
+                                                </li>
+                                                <li><a class="dropdown-item"
+                                                       href="<c:url value="/${controllerPath}/delete?${pageQuery}&id=${item.id}"/>"
+                                                >删除</a></li>
+                                            </ul>
+                                        </div>
+                                    </c:if>
+                                    <c:if test="${action=='change' && param.id==item.id}">
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-outline-success dropdown-toggle"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                操作
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <button class="dropdown-item">保存</button>
+                                                </li>
+                                                <li><a class="dropdown-item"
+                                                       href="<c:url value="/index?${pageQuery}"/>">取消</a></li>
+                                            </ul>
+                                        </div>
+                                    </c:if>
+                                </td>
+                            </c:if>
 
                         </tr>
                     </form>
@@ -108,14 +114,16 @@
         </div>
 
         <div class="col-3">
-            <div class="card ">
-                <div class="card-header">
-                    操作
+            <c:if test="${userInstance.role=='admin'}">
+                <div class="card">
+                    <div class="card-header">
+                        操作
+                    </div>
+                    <div class="card-body">
+                        <a class="btn btn-success" href="/${controllerPath}/add">新增</a>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <a class="btn btn-success" href="/${controllerPath}/add">新增</a>
-                </div>
-            </div>
+            </c:if>
             <div class="card mt-3">
                 <div class="card-header">
                     我的
