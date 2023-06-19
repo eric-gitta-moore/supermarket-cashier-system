@@ -8,6 +8,7 @@ import com.exam.supermarket.po.UserPo;
 import com.exam.supermarket.service.UserService;
 import com.exam.supermarket.util.FieldDescriptorUtil;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.util.*;
 
 @WebServlet({"/user", "/user/*"})
+@MultipartConfig
 public class UserController extends BaseController<UserPo> {
 
     public UserController() {

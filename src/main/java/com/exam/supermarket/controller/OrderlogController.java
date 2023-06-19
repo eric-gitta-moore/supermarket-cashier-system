@@ -7,6 +7,7 @@ import com.exam.supermarket.po.OrderlogPo;
 import com.exam.supermarket.service.OrderlogService;
 import com.exam.supermarket.util.FieldDescriptorUtil;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @WebServlet({"/orderlog", "/orderlog/*"})
+@MultipartConfig
 public class OrderlogController extends BaseController<OrderlogPo> {
 
     public OrderlogController() {
