@@ -2,11 +2,10 @@ package com.exam.supermarket.po;
 
 import lombok.Data;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 @Data
-public class OrderPo implements Serializable {
+public class OrderlogPo implements Serializable {
     private static final long serialVersionUID = -2868325200355998897L;
     private String id;
     private String customerId;
