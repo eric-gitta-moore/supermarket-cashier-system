@@ -150,6 +150,17 @@ public class CashierController extends BaseController<GoodPo> {
             customer = new UserPo();
             customer.setVip(vip);
             customer = this.userService.getOne(customer);
+            if (customer == null) {
+                req.setAttribute(RequestScopeConstant.TOAST,
+                    new ToastVo("提示", "VIP卡号不存在"));
+
+                req.setAttribute(RequestScopeConstant.RECORDS, cashierGoodVoList);
+                req.setAttribute("goodIds", String.join(",", goodIds));
+                req.setAttribute("payable", formatPayable);
+                req.setAttribute(RequestScopeConstant.FIELDS, getIndexFields(req, resp));
+                this.autoForward(req, resp, "index");
+                return;
+            }
         }
 
         OrderlogPo orderlogPo = new OrderlogPo();
