@@ -7,6 +7,7 @@ import com.exam.supermarket.po.GoodPo;
 import com.exam.supermarket.service.GoodService;
 import com.exam.supermarket.util.FieldDescriptorUtil;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.util.*;
 
 @WebServlet({"/index", "/index/*"})
+@MultipartConfig
 public class IndexController extends BaseController<GoodPo> {
 
     public IndexController() {

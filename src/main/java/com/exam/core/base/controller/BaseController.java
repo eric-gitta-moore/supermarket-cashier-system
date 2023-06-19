@@ -7,12 +7,15 @@ import com.exam.core.common.metadata.PathInfo;
 import com.exam.core.common.plugin.pagination.Page;
 import com.exam.core.common.util.GenericsUtils;
 import com.exam.core.common.util.UrlUtil;
+import com.exam.supermarket.constant.FileTypeConstant;
 import com.exam.supermarket.metadata.FieldDescriptor;
 import com.exam.supermarket.util.AuthorActionDispatcherUtil;
+import com.exam.supermarket.vo.ToastVo;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.beanutils.BeanUtils;
@@ -22,7 +25,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class BaseController<T> extends HttpServlet {
@@ -101,7 +103,7 @@ public class BaseController<T> extends HttpServlet {
         req.getRequestDispatcher(String.format("%s/edit.jsp", this.templatePath)).forward(req, resp);
     }
 
-    protected void sendRedirectHome(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void forwardHome(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.sendRedirect(String.format("/%s", this.pathInfo.getController()));
     }
 
@@ -121,12 +123,24 @@ public class BaseController<T> extends HttpServlet {
             .doWrite(() -> this.service.list());
     }
 
-    protected void importXls(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void importXls(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Part file = req.getPart("file");
+        if (file == null) {
+            req.setAttribute("toast", new ToastVo("error", "上传文件失败"));
+            this.forwardHome(req, resp);
+            return;
+        } else if (!FileTypeConstant.xlsx.equals(file.getContentType())) {
+            req.setAttribute("toast", new ToastVo("error", "文件类型错误"));
+            this.forwardHome(req, resp);
+            return;
+        }
+        // TODO: continue
+//        EasyExcel.read(file.getInputStream(), UploadData.class, new UploadDataListener(uploadDAO)).sheet().doRead();
     }
 
     protected void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         this.service.removeById(req.getParameter("id"));
-        this.sendRedirectHome(req, resp);
+        this.forwardHome(req, resp);
     }
 
     protected void save(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -151,7 +165,7 @@ public class BaseController<T> extends HttpServlet {
             throw new RuntimeException(e);
         }
         this.service.saveOrUpdate(po);
-        this.sendRedirectHome(req, resp);
+        this.forwardHome(req, resp);
     }
 
     protected Map<String, FieldDescriptor> getUpdateFields(HttpServletRequest req, HttpServletResponse resp) {
