@@ -3,10 +3,12 @@ package com.exam.supermarket.controller;
 import com.exam.core.base.controller.BaseController;
 import com.exam.core.common.metadata.SiteMetadata;
 import com.exam.supermarket.constant.RequestScopeConstant;
+import com.exam.supermarket.dto.OrderlogStatsDto;
 import com.exam.supermarket.metadata.FieldDescriptor;
 import com.exam.supermarket.po.OrderlogPo;
 import com.exam.supermarket.service.OrderlogService;
 import com.exam.supermarket.util.FieldDescriptorUtil;
+import com.exam.supermarket.vo.OrderlogStatsVo;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -30,6 +33,13 @@ public class OrderlogController extends BaseController<OrderlogPo> {
     protected void index(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         SiteMetadata siteMetadata = new SiteMetadata("订单列表", "订单列表", "订单列表", "");
         req.setAttribute(RequestScopeConstant.SITE_METADATA, siteMetadata);
+        OrderlogStatsDto statsDto = ((OrderlogService) this.getService()).getStats();
+        OrderlogStatsVo orderlogStatsVo = new OrderlogStatsVo();
+        orderlogStatsVo.setMonthTransaction((new DecimalFormat("0.00")).format(statsDto.getMonthTransaction()));
+        orderlogStatsVo.setMonthOrderCount(statsDto.getMonthOrderCount().toString());
+        orderlogStatsVo.setTotalTransaction((new DecimalFormat("0.00")).format(statsDto.getTotalTransaction()));
+        orderlogStatsVo.setTotalOrderCount(statsDto.getTotalOrderCount().toString());
+        req.setAttribute("stats", orderlogStatsVo);
         super.index(req, resp);
     }
 

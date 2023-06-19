@@ -83,6 +83,7 @@
             <c:if test="${userInstance.role=='admin'}">
                 <jsp:include page="../components/cardAct.jsp"></jsp:include>
             </c:if>
+            <jsp:include page="./components/stats.jsp"></jsp:include>
             <jsp:include page="../components/cardMy.jsp"></jsp:include>
         </div>
     </div>

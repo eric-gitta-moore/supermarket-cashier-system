@@ -27,6 +27,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     @Getter
     protected String idField = "id";
 
+    @Getter
     private QueryRunner runner;
 
     public BaseDaoImpl() {
