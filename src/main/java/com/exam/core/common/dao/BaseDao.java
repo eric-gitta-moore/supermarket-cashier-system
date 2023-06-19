@@ -76,6 +76,8 @@ public interface BaseDao<T> {
      */
     List<T> selectBatchIds(Collection<? extends Serializable> idList) throws SQLException;
 
+    Map<String, T> selectKeyedBatchIds(Collection<? extends Serializable> idList) throws SQLException;
+
     /**
      * 查询（根据 columnMap 条件）
      *
@@ -125,7 +127,6 @@ public interface BaseDao<T> {
 
     /**
      * 根据 entity 条件，查询全部记录
-     *
      */
     List<T> selectList(T entity) throws SQLException;
 

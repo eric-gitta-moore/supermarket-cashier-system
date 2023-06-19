@@ -1,13 +1,15 @@
-package com.exam.supermarket.vo;
+package com.exam.supermarket.dto;
 
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.exam.supermarket.po.GoodPo;
+import com.exam.supermarket.po.UserPo;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Data
-public class OrderLogVo implements Serializable {
+public class OrderLogDto implements Serializable {
 
     private static final long serialVersionUID = -2868325200355998897L;
 
@@ -28,9 +30,6 @@ public class OrderLogVo implements Serializable {
 
     @ExcelProperty("商品货号")
     private String goodId;
-
-    @ExcelProperty("商品")
-    private String goodName;
 
     @ExcelProperty("应付")
     private Double payable;
