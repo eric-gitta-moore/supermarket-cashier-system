@@ -4,6 +4,7 @@ import com.exam.core.base.dao.BaseDao;
 import com.exam.core.common.metadata.IPage;
 import com.exam.core.common.util.ClassFieldUtil;
 import com.exam.core.common.util.GenericsUtils;
+import lombok.Getter;
 import org.apache.commons.beanutils.BeanUtils;
 
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 public class BaseService<T> {
 
+    @Getter
     protected BaseDao<T> dao;
 
 
