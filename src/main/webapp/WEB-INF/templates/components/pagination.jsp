@@ -43,7 +43,7 @@
     >首页</a>
 </li>
 
-<li class="page-item <c:if test="${param.current<=1}">disabled</c:if>">
+<li class="page-item <c:if test="${param.current+0<=1}">disabled</c:if>">
     <a class="page-link"
        href="${param.uri}?${param.pageParamName}=${param.current-1}&${param.sizeParamName}=${param.size}"
     >上一页</a>
@@ -57,7 +57,7 @@
     </li>
 </c:forEach>
 
-<li class="page-item <c:if test="${param.current>=param.pages}">disabled</c:if>">
+<li class="page-item <c:if test="${param.current+0>=param.pages+0}">disabled</c:if>">
     <a class="page-link"
        href="${param.uri}?${param.pageParamName}=${param.current+1}&${param.sizeParamName}=${param.size}"
     >下一页</a>
