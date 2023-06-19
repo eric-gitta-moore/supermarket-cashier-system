@@ -30,7 +30,8 @@ public class OrderlogService extends BaseService<OrderlogPo> {
     }
 
     public OrderlogStatsDto getStats() {
-        return ((OrderlogDao) this.dao).getStats();
+        OrderlogStatsDto statsDto = ((OrderlogDao) this.dao).getStats();
+        return statsDto.getMonthTransaction() == null ? new OrderlogStatsDto(0.0, 0, 0.0, 0) : statsDto;
     }
 
     public IPage<OrderLogBo> pageBo(IPage<OrderLogBo> page) {
@@ -45,6 +46,11 @@ public class OrderlogService extends BaseService<OrderlogPo> {
 
         ((OrderlogDao) this.getDao()).selectTablePage(orderLogDtoPage);
         page.setTotal(orderLogDtoPage.getTotal());
+
+        if (page.getTotal() == 0) {
+            return page;
+        }
+
         Set<Integer> goodIds = new HashSet<>();
         orderLogDtoPage.getRecords().forEach(e -> goodIds.addAll(
             Arrays.asList(e.getGoodId().split(","))

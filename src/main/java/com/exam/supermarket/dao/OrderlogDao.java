@@ -30,7 +30,7 @@ public class OrderlogDao extends BaseDao<OrderlogPo> {
                            from orderlog
                            where time >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)) oo;
             """;
-        OrderlogStatsDto statsDto = null;
+        OrderlogStatsDto statsDto;
         try {
             statsDto = this.getRunner().query(sql, new BeanHandler<>(OrderlogStatsDto.class));
         } catch (SQLException e) {
