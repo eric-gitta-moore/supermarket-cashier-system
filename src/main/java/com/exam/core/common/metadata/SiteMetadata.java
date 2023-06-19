@@ -16,4 +16,10 @@ public class SiteMetadata {
      * 统计js代码
      */
     private String statsScript;
+
+    public SiteMetadata(String title, String description, String keywords) {
+        this.title = title;
+        this.description = description;
+        this.keywords = keywords;
+    }
 }

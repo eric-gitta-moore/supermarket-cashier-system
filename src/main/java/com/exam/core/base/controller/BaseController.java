@@ -41,7 +41,12 @@ public class BaseController<T> extends HttpServlet {
     @Setter
     private BaseService<T> service;
 
+    @Getter
+    @Setter
     private String templatePath;
+
+    @Getter
+    @Setter
     private PathInfo pathInfo;
 
     protected void dispatch(HttpServletRequest req, HttpServletResponse resp) {
@@ -61,6 +66,11 @@ public class BaseController<T> extends HttpServlet {
         this.doGet(req, resp);
     }
 
+    protected void autoForward(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher(String.format("%s/%s.jsp", this.templatePath, this.pathInfo.getAction()))
+            .forward(req, resp);
+    }
+
     protected void index(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         int page = 1;
         int size = 10;
@@ -78,12 +88,12 @@ public class BaseController<T> extends HttpServlet {
         req.setAttribute("records", pagination.getRecords());
         req.setAttribute("pageQuery", String.format("page=%d&size=%d", page, size));
         req.setAttribute("fields", this.getIndexFields(req, resp));
-        req.getRequestDispatcher(String.format("%s/index.jsp", this.templatePath)).forward(req, resp);
+        this.autoForward(req, resp);
     }
 
     protected void add(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         req.setAttribute("fields", getAddFields(req, resp));
-        req.getRequestDispatcher(String.format("%s/add.jsp", this.templatePath)).forward(req, resp);
+        this.autoForward(req, resp);
     }
 
     protected void edit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -100,7 +110,7 @@ public class BaseController<T> extends HttpServlet {
         }
         req.setAttribute("record", record);
         req.setAttribute("fields", getUpdateFields(req, resp));
-        req.getRequestDispatcher(String.format("%s/edit.jsp", this.templatePath)).forward(req, resp);
+        this.autoForward(req, resp);
     }
 
     protected void forwardHome(HttpServletRequest req, HttpServletResponse resp) throws IOException {
