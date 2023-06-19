@@ -23,7 +23,7 @@ public class LoginController extends BaseController {
     protected void index(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         SiteMetadata siteMetadata = new SiteMetadata("登录", "登录", "登录", "");
         req.setAttribute("siteMetadata", siteMetadata);
-        req.getRequestDispatcher("/WEB-INF/templates/login/index.jsp").forward(req, resp);
+        this.autoForward(req, resp);
     }
 
     protected void logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
