@@ -40,7 +40,7 @@ public class IndexController extends BaseController<GoodPo> {
     }
 
     @Override
-    protected Map<String, FieldDescriptor> getUpdateFields(HttpServletRequest req, HttpServletResponse resp) {
+    protected Map<String, FieldDescriptor> getIndexFields(HttpServletRequest req, HttpServletResponse resp) {
         return FieldDescriptorUtil.filterDescriptor(this.getFields(req, resp),
             new String[]{"id", "name", "stock", "price"});
     }
@@ -52,8 +52,9 @@ public class IndexController extends BaseController<GoodPo> {
     }
 
     @Override
-    protected Map<String, FieldDescriptor> getIndexFields(HttpServletRequest req, HttpServletResponse resp) {
+    protected Map<String, FieldDescriptor> getUpdateFields(HttpServletRequest req, HttpServletResponse resp) {
         return FieldDescriptorUtil.filterDescriptor(this.getFields(req, resp),
             new String[]{"id", "name", "stock", "price"});
     }
+
 }
