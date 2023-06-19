@@ -2,7 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>登录</title>
     <jsp:include page="../common/head.jsp"/>
     <jsp:include page="../common/static.jsp"/>
 </head>
