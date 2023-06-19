@@ -80,7 +80,7 @@ public class BaseController<T> extends HttpServlet {
         req.getRequestDispatcher(String.format("%s/add.jsp", this.templatePath)).forward(req, resp);
     }
 
-    protected void change(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void edit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         T po = this.service.getById(req.getParameter("id"));
         Map<String, String> record = null;
         try {
@@ -94,7 +94,7 @@ public class BaseController<T> extends HttpServlet {
         }
         req.setAttribute("record", record);
         req.setAttribute("fields", getUpdateFields(req, resp));
-        req.getRequestDispatcher(String.format("%s/change.jsp", this.templatePath)).forward(req, resp);
+        req.getRequestDispatcher(String.format("%s/edit.jsp", this.templatePath)).forward(req, resp);
     }
 
     protected void sendRedirectHome(HttpServletRequest req, HttpServletResponse resp) throws IOException {

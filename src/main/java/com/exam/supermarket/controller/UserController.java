@@ -39,10 +39,10 @@ public class UserController extends BaseController<UserPo> {
     }
 
     @Override
-    protected void change(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void edit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         SiteMetadata siteMetadata = new SiteMetadata("修改会员", "修改会员", "修改会员", "");
         req.setAttribute("siteMetadata", siteMetadata);
-        super.change(req, resp);
+        super.edit(req, resp);
     }
 
     private Map<String, String> getRoleOptions(HttpServletRequest req, HttpServletResponse resp) {

@@ -38,10 +38,10 @@ public class OrderlogController extends BaseController<OrderlogPo> {
     }
 
     @Override
-    protected void change(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void edit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         SiteMetadata siteMetadata = new SiteMetadata("修改订单", "修改订单", "修改订单", "");
         req.setAttribute("siteMetadata", siteMetadata);
-        super.change(req, resp);
+        super.edit(req, resp);
     }
 
     protected Map<String, FieldDescriptor> getFields(HttpServletRequest req, HttpServletResponse resp) {
