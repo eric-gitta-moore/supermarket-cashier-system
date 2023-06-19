@@ -1,14 +1,17 @@
 package com.exam.supermarket.controller;
 
 import com.exam.core.base.controller.BaseController;
+import com.exam.core.common.metadata.SiteMetadata;
 import com.exam.supermarket.metadata.FieldDescriptor;
 import com.exam.supermarket.po.GoodPo;
 import com.exam.supermarket.service.GoodService;
 import com.exam.supermarket.util.FieldDescriptorUtil;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
 import java.util.*;
 
 @WebServlet({"/index", "/index/*"})
@@ -17,6 +20,27 @@ public class IndexController extends BaseController<GoodPo> {
     public IndexController() {
         this.setService(new GoodService());
         this.setNoNeedLogin(new String[]{"index"});
+    }
+
+    @Override
+    protected void index(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        SiteMetadata siteMetadata = new SiteMetadata("商品列表", "商品列表", "商品列表", "");
+        req.setAttribute("siteMetadata", siteMetadata);
+        super.index(req, resp);
+    }
+
+    @Override
+    protected void add(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        SiteMetadata siteMetadata = new SiteMetadata("新增商品", "新增商品", "新增商品", "");
+        req.setAttribute("siteMetadata", siteMetadata);
+        super.add(req, resp);
+    }
+
+    @Override
+    protected void change(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        SiteMetadata siteMetadata = new SiteMetadata("修改商品", "修改商品", "修改商品", "");
+        req.setAttribute("siteMetadata", siteMetadata);
+        super.change(req, resp);
     }
 
     protected Map<String, FieldDescriptor> getFields(HttpServletRequest req, HttpServletResponse resp) {

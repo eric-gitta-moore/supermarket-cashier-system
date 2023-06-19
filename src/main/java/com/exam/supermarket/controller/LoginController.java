@@ -1,6 +1,7 @@
 package com.exam.supermarket.controller;
 
 import com.exam.core.base.controller.BaseController;
+import com.exam.core.common.metadata.SiteMetadata;
 import com.exam.supermarket.constant.SessionConstant;
 import com.exam.supermarket.po.UserPo;
 import com.exam.supermarket.service.UserService;
@@ -20,6 +21,8 @@ public class LoginController extends BaseController {
 
     @Override
     protected void index(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        SiteMetadata siteMetadata = new SiteMetadata("登录", "登录", "登录", "");
+        req.setAttribute("siteMetadata", siteMetadata);
         req.getRequestDispatcher("/WEB-INF/templates/login/index.jsp").forward(req, resp);
     }
 

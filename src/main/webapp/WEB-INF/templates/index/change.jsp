@@ -5,7 +5,6 @@
 <%--@elvariable id="fields" type="java.util.Map<java.lang.String,com.exam.supermarket.metadata.FieldDescriptor>"--%>
 <html>
 <head>
-    <title>修改</title>
     <jsp:include page="../common/head.jsp"/>
     <jsp:include page="../common/static.jsp"/>
 </head>
