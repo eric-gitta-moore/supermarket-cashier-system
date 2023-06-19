@@ -1,6 +1,7 @@
 package com.exam.supermarket.controller;
 
 import com.exam.core.base.controller.BaseController;
+import com.exam.supermarket.constant.enums.FieldTypeEnum;
 import com.exam.supermarket.metadata.FieldDescriptor;
 import com.exam.supermarket.po.UserPo;
 import com.exam.supermarket.service.UserService;
@@ -19,21 +20,35 @@ public class UserController extends BaseController<UserPo> {
         this.setService(new UserService());
     }
 
+    private Map<String, String> getRoleOptions(HttpServletRequest req, HttpServletResponse resp) {
+        HashMap<String, String> map = new LinkedHashMap<>();
+        map.put("admin", "管理员");
+        map.put("cashier", "收银员");
+        map.put("user", "用户");
+        return map;
+    }
 
     protected Map<String, FieldDescriptor> getFields(HttpServletRequest req, HttpServletResponse resp) {
         Map<String, FieldDescriptor> fields = new LinkedHashMap<>();
 
         FieldDescriptor idDesc = new FieldDescriptor("id","ID",false);
         idDesc.setTableHeaderLabel("#");
+        idDesc.setReadonly(true);
+        idDesc.setDisabled(true);
         fields.put("id", idDesc);
 
         FieldDescriptor usernameDesc = new FieldDescriptor("username","用户名", true);
         fields.put("username", usernameDesc);
 
+        FieldDescriptor passwordDesc = new FieldDescriptor("password","密码", true);
+        fields.put("password", passwordDesc);
+
         FieldDescriptor nameDesc = new FieldDescriptor("name","姓名", true);
         fields.put("name", nameDesc);
 
         FieldDescriptor roleDesc = new FieldDescriptor("role","角色", true);
+        roleDesc.setFieldType(FieldTypeEnum.RADIO);
+        roleDesc.setOptions(this.getRoleOptions(req, resp));
         fields.put("role", roleDesc);
 
         FieldDescriptor vipDesc = new FieldDescriptor("vip","VIP",false);
@@ -42,14 +57,20 @@ public class UserController extends BaseController<UserPo> {
     }
 
     @Override
-    protected Map<String, FieldDescriptor> getUpdateFields(HttpServletRequest req, HttpServletResponse resp) {
+    protected Map<String, FieldDescriptor> getIndexFields(HttpServletRequest req, HttpServletResponse resp) {
         return FieldDescriptorUtil.filterDescriptor(this.getFields(req,resp),
+            new String[]{"id", "username", "name", "role", "vip"});
+    }
+
+    @Override
+    protected Map<String, FieldDescriptor> getAddFields(HttpServletRequest req, HttpServletResponse resp) {
+        return FieldDescriptorUtil.filterDescriptor(this.getFields(req, resp),
             new String[]{"username", "password", "name", "role", "vip"});
     }
 
     @Override
-    protected Map<String, FieldDescriptor> getIndexFields(HttpServletRequest req, HttpServletResponse resp) {
+    protected Map<String, FieldDescriptor> getUpdateFields(HttpServletRequest req, HttpServletResponse resp) {
         return FieldDescriptorUtil.filterDescriptor(this.getFields(req,resp),
-            new String[]{"id", "username", "name", "role", "vip"});
+            new String[]{"id", "username", "password", "name", "role", "vip"});
     }
 }
