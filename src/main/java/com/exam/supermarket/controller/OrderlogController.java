@@ -2,6 +2,7 @@ package com.exam.supermarket.controller;
 
 import com.exam.core.base.controller.BaseController;
 import com.exam.core.common.metadata.SiteMetadata;
+import com.exam.supermarket.constant.RequestScopeConstant;
 import com.exam.supermarket.metadata.FieldDescriptor;
 import com.exam.supermarket.po.OrderlogPo;
 import com.exam.supermarket.service.OrderlogService;
@@ -28,21 +29,21 @@ public class OrderlogController extends BaseController<OrderlogPo> {
     @Override
     protected void index(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         SiteMetadata siteMetadata = new SiteMetadata("订单列表", "订单列表", "订单列表", "");
-        req.setAttribute("siteMetadata", siteMetadata);
+        req.setAttribute(RequestScopeConstant.SITE_METADATA, siteMetadata);
         super.index(req, resp);
     }
 
     @Override
     protected void add(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         SiteMetadata siteMetadata = new SiteMetadata("新增订单", "新增订单", "新增订单", "");
-        req.setAttribute("siteMetadata", siteMetadata);
+        req.setAttribute(RequestScopeConstant.SITE_METADATA, siteMetadata);
         super.add(req, resp);
     }
 
     @Override
     protected void edit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         SiteMetadata siteMetadata = new SiteMetadata("修改订单", "修改订单", "修改订单", "");
-        req.setAttribute("siteMetadata", siteMetadata);
+        req.setAttribute(RequestScopeConstant.SITE_METADATA, siteMetadata);
         super.edit(req, resp);
     }
 
@@ -55,17 +56,14 @@ public class OrderlogController extends BaseController<OrderlogPo> {
         idDesc.setDisabled(true);
         fields.put("id", idDesc);
 
-        FieldDescriptor customerDesc = new FieldDescriptor("customer_id", "顾客id", true);
-        fields.put("customer_id", customerDesc);
+        FieldDescriptor customerDesc = new FieldDescriptor("customerId", "顾客id", true);
+        fields.put("customerId", customerDesc);
 
-        FieldDescriptor cashierDesc = new FieldDescriptor("cashier_id", "收银员id", true);
-        fields.put("cashier_id", cashierDesc);
+        FieldDescriptor cashierDesc = new FieldDescriptor("cashierId", "收银员id", true);
+        fields.put("cashierId", cashierDesc);
 
-        FieldDescriptor goodDesc = new FieldDescriptor("good_id", "商品id", true);
-        fields.put("good_id", goodDesc);
-
-        FieldDescriptor numDesc = new FieldDescriptor("num", "购买数量", true);
-        fields.put("num", numDesc);
+        FieldDescriptor goodDesc = new FieldDescriptor("goodId", "商品", true);
+        fields.put("goodId", goodDesc);
 
         FieldDescriptor payableDesc = new FieldDescriptor("payable", "应付", true);
         fields.put("payable", payableDesc);
@@ -81,19 +79,19 @@ public class OrderlogController extends BaseController<OrderlogPo> {
     @Override
     protected Map<String, FieldDescriptor> getIndexFields(HttpServletRequest req, HttpServletResponse resp) {
         return FieldDescriptorUtil.filterDescriptor(this.getFields(req, resp),
-            new String[]{"id", "customer_id", "cashier_id", "good_id", "num", "payable", "payment", "time"});
+            new String[]{"id", "customerId", "cashierId", "goodId", "payable", "payment", "time"});
     }
 
     @Override
     protected Map<String, FieldDescriptor> getAddFields(HttpServletRequest req, HttpServletResponse resp) {
         return FieldDescriptorUtil.filterDescriptor(this.getFields(req, resp),
-            new String[]{"customer_id", "cashier_id", "good_id", "num", "payable", "payment", "time"});
+            new String[]{"customerId", "cashierId", "goodId", "payable", "payment", "time"});
     }
 
     @Override
     protected Map<String, FieldDescriptor> getUpdateFields(HttpServletRequest req, HttpServletResponse resp) {
         return FieldDescriptorUtil.filterDescriptor(this.getFields(req, resp),
-            new String[]{"id", "customer_id", "cashier_id", "good_id", "num", "payable", "payment", "time"});
+            new String[]{"id", "customerId", "cashierId", "goodId", "payable", "payment", "time"});
     }
 
 }

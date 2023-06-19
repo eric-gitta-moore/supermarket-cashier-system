@@ -9,7 +9,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ToastVo {
 
-    private String type;
+    private String type = "info";
+    private String title;
     private String msg;
 
+    private String tipsTime;
+
+    public ToastVo(String title, String msg) {
+        this.title = title;
+        this.msg = msg;
+    }
 }

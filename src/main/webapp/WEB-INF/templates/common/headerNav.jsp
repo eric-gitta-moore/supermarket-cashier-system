@@ -10,19 +10,19 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="<c:url value="/cashier"/>">收银台</a>
+                    <a class="nav-link" href="/cashier">收银台</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<c:url value="/index"/>">商品管理</a>
+                    <a class="nav-link" href="/index">商品管理</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<c:url value="/user"/>">会员管理</a>
+                    <a class="nav-link" href="/user">会员管理</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<c:url value="/orderlog"/>">订单管理</a>
+                    <a class="nav-link" href="/orderlog">订单管理</a>
                 </li>
             </ul>
-            <a href="<c:url value="/login/logout"/>" class="btn btn-info">退出登录</a>
+            <a href="/login/logout" class="btn btn-info">退出登录</a>
         </div>
     </div>
 </nav>

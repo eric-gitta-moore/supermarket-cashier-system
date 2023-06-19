@@ -1,6 +1,7 @@
 package com.exam.core.base.controller;
 
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.read.listener.PageReadListener;
 import com.exam.core.base.service.BaseService;
 import com.exam.core.common.metadata.IPage;
 import com.exam.core.common.metadata.PathInfo;
@@ -26,6 +27,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
 
 public class BaseController<T> extends HttpServlet {
 
@@ -49,6 +52,8 @@ public class BaseController<T> extends HttpServlet {
     @Setter
     private PathInfo pathInfo;
 
+    private Logger logger = Logger.getLogger(this.getClass().getName());
+
     protected void dispatch(HttpServletRequest req, HttpServletResponse resp) {
         this.pathInfo = UrlUtil.parsePathInfo(req.getRequestURI());
         this.templatePath = String.format("/WEB-INF/templates/%s", this.pathInfo.getController());
@@ -68,6 +73,12 @@ public class BaseController<T> extends HttpServlet {
 
     protected void autoForward(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher(String.format("%s/%s.jsp", this.templatePath, this.pathInfo.getAction()))
+            .forward(req, resp);
+    }
+
+    protected void autoForward(HttpServletRequest req, HttpServletResponse resp, String tpl)
+        throws ServletException, IOException {
+        req.getRequestDispatcher(String.format("%s/%s.jsp", this.templatePath, tpl))
             .forward(req, resp);
     }
 
@@ -136,16 +147,26 @@ public class BaseController<T> extends HttpServlet {
     protected void importXls(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Part file = req.getPart("file");
         if (file == null) {
-            req.setAttribute("toast", new ToastVo("error", "上传文件失败"));
+            req.setAttribute("toast", new ToastVo("错误", "上传文件失败"));
             this.forwardHome(req, resp);
             return;
         } else if (!FileTypeConstant.xlsx.equals(file.getContentType())) {
-            req.setAttribute("toast", new ToastVo("error", "文件类型错误"));
+            req.setAttribute("toast", new ToastVo("错误", "文件类型错误"));
             this.forwardHome(req, resp);
             return;
         }
-        // TODO: continue
-//        EasyExcel.read(file.getInputStream(), UploadData.class, new UploadDataListener(uploadDAO)).sheet().doRead();
+
+        AtomicInteger xlsxLen = new AtomicInteger();
+        // 这里默认每次会读取100条数据 然后返回过来 直接调用使用数据就行
+        // 具体需要返回多少行可以在`PageReadListener`的构造函数设置
+        EasyExcel.read(file.getInputStream(), GenericsUtils.getSuperClassGenericType(this.getClass()),
+            new PageReadListener<T>(dataList -> {
+                xlsxLen.addAndGet(dataList.size());
+                logger.info(String.format("读取到%s条数据", dataList.size()));
+                this.service.saveBatch(dataList);
+            })).sheet().doRead();
+        req.setAttribute("infoMsg", String.format("成功导入%d条数据", xlsxLen.get()));
+        req.getRequestDispatcher("/WEB-INF/templates/common/info.jsp").forward(req, resp);
     }
 
     protected void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {

@@ -16,10 +16,6 @@ public class UserService extends BaseService<UserPo> {
         UserPo userPo = new UserPo();
         userPo.setUsername(username);
         userPo.setPassword(password);
-        try {
-            return this.getOne(userPo);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return this.getOne(userPo);
     }
 }
