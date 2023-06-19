@@ -1,5 +1,6 @@
 package com.exam.core.base.controller;
 
+import com.alibaba.excel.EasyExcel;
 import com.exam.core.base.service.BaseService;
 import com.exam.core.common.metadata.IPage;
 import com.exam.core.common.metadata.PathInfo;
@@ -18,7 +19,10 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BaseController<T> extends HttpServlet {
@@ -99,6 +103,25 @@ public class BaseController<T> extends HttpServlet {
 
     protected void sendRedirectHome(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.sendRedirect(String.format("/%s", this.pathInfo.getController()));
+    }
+
+    protected void exportXls(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setCharacterEncoding("utf-8");
+        // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+        String fileName = URLEncoder.encode(
+                String.format("导出%s数据", this.service.getDao().getTable()),
+                StandardCharsets.UTF_8).
+            replaceAll("\\+", "%20");
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
+        EasyExcel.write(response.getOutputStream(),
+                GenericsUtils.getSuperClassGenericType(this.getClass()))
+            .sheet("Sheet1")
+            .doWrite(() -> this.service.list());
+    }
+
+    protected void importXls(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     }
 
     protected void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {

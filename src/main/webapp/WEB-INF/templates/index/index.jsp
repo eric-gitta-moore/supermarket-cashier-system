@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--@elvariable id="action" type="java.lang.String"--%>
 <%--@elvariable id="pathInfo" type="com.exam.core.common.metadata.PathInfo"--%>
 <%--@elvariable id="fields" type="java.util.Map<java.lang.String,com.exam.supermarket.metadata.FieldDescriptor>"--%>
 <html>
@@ -29,7 +28,7 @@
                 <c:forEach items="${records}" var="record">
                     <%--@elvariable id="pageQuery" type="java.lang.String"--%>
                     <form
-                            action="<c:url value="/${pathInfo.controller}/save?${pageQuery}&id=${record.id}"/>"
+                            action="/${pathInfo.controller}/save?${pageQuery}&id=${record.id}"
                             method="post">
                         <tr>
 
@@ -48,11 +47,11 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item"
-                                                   href="<c:url value="/${pathInfo.controller}/edit?${pageQuery}&id=${record.id}"/>"
+                                                   href="/${pathInfo.controller}/edit?${pageQuery}&id=${record.id}"
                                             >修改</a>
                                             </li>
                                             <li><a class="dropdown-item"
-                                                   href="<c:url value="/${pathInfo.controller}/delete?${pageQuery}&id=${record.id}"/>"
+                                                   href="/${pathInfo.controller}/delete?${pageQuery}&id=${record.id}"
                                             >删除</a></li>
                                         </ul>
                                     </div>
@@ -82,24 +81,9 @@
 
         <div class="col-3">
             <c:if test="${userInstance.role=='admin'}">
-                <div class="card">
-                    <div class="card-header">
-                        操作
-                    </div>
-                    <div class="card-body">
-                        <a class="btn btn-success" href="/${pathInfo.controller}/add">新增</a>
-                    </div>
-                </div>
+                <jsp:include page="../components/cardAct.jsp"></jsp:include>
             </c:if>
-            <div class="card mt-3">
-                <div class="card-header">
-                    我的
-                </div>
-                <div class="card-body">
-                    <%--@elvariable id="userInstance" type="com.exam.supermarket.po.UserPo"--%>
-                    用户名：${userInstance.username}
-                </div>
-            </div>
+            <jsp:include page="../components/cardMy.jsp"></jsp:include>
         </div>
     </div>
 </div>
