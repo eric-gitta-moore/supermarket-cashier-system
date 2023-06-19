@@ -75,7 +75,7 @@
                     <jsp:param name="showSize" value="3"/>
                     <jsp:param name="pageParamName" value="page"/>
                     <jsp:param name="sizeParamName" value="size"/>
-                    <jsp:param name="uri" value="/index"/>
+                    <jsp:param name="uri" value="/${pathInfo.controller}"/>
                 </jsp:include>
             </nav>
         </div>
