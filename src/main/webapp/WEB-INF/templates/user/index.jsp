@@ -1,10 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--@elvariable id="action" type="java.lang.String"--%>
-<%--@elvariable id="controllerPath" type="java.lang.String"--%>
+<%--@elvariable id="pathInfo" type="com.exam.core.common.metadata.PathInfo"--%>
+<%--@elvariable id="fields" type="java.util.Map<java.lang.String,com.exam.supermarket.metadata.FieldDescriptor>"--%>
 <html>
 <head>
-    <title>会员管理</title>
+    <title>首页</title>
     <jsp:include page="../common/head.jsp"/>
     <jsp:include page="../common/static.jsp"/>
 </head>
@@ -16,68 +17,46 @@
             <table class="table align-middle">
                 <thead>
                 <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">用户名</th>
-                    <th scope="col">昵称</th>
-                    <th scope="col">角色</th>
-                    <th scope="col">会员卡</th>
+                    <c:forEach items="${fields.values()}" var="item">
+                        <th>${item.tableHeaderLabel}</th>
+                    </c:forEach>
                     <c:if test="${userInstance.role=='admin'}">
-                        <th scope="col">操作</th>
+                        <th>操作</th>
                     </c:if>
                 </tr>
                 </thead>
                 <tbody>
-                <%--@elvariable id="records" type="java.util.List<com.exam.supermarket.po.UserPo>"--%>
-                <c:forEach items="${records}" var="item">
+                <%--@elvariable id="records" type="java.util.List<com.exam.supermarket.po.GoodPo>"--%>
+                <c:forEach items="${records}" var="record">
                     <%--@elvariable id="pageQuery" type="java.lang.String"--%>
                     <form
-                            action="<c:url value="/${controllerPath}/save?${pageQuery}&id=${item.id}"/>"
+                            action="<c:url value="/${pathInfo.controller}/save?${pageQuery}&id=${record.id}"/>"
                             method="post">
                         <tr>
 
-                            <th scope="row">${item.id}</th>
-                            <td>${item.username}</td>
-                            <td>${item.name}</td>
-                            <td>${item.role}</td>
-                            <td>${item.vip}</td>
+                            <c:forEach items="${fields.values()}" var="fieldDesc">
+                                <td>${record[fieldDesc.fieldName]}</td>
+                            </c:forEach>
 
                                 <%-- 操作 --%>
                             <c:if test="${userInstance.role=='admin'}">
                                 <td>
-                                    <c:if test="${param.id!=item.id}">
-                                        <div class="btn-group" role="group">
-                                            <button type="button" class="btn btn-primary dropdown-toggle"
-                                                    data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                操作
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item"
-                                                       href="<c:url value="/${controllerPath}/change?${pageQuery}&id=${item.id}"/>"
-                                                >修改</a>
-                                                </li>
-                                                <li><a class="dropdown-item"
-                                                       href="<c:url value="/${controllerPath}/delete?${pageQuery}&id=${item.id}"/>"
-                                                >删除</a></li>
-                                            </ul>
-                                        </div>
-                                    </c:if>
-                                    <c:if test="${action=='change' && param.id==item.id}">
-                                        <div class="btn-group" role="group">
-                                            <button type="button" class="btn btn-outline-success dropdown-toggle"
-                                                    data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                操作
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <button class="dropdown-item">保存</button>
-                                                </li>
-                                                <li><a class="dropdown-item"
-                                                       href="<c:url value="/index?${pageQuery}"/>">取消</a></li>
-                                            </ul>
-                                        </div>
-                                    </c:if>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-primary dropdown-toggle"
+                                                data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                            操作
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item"
+                                                   href="<c:url value="/${pathInfo.controller}/change?${pageQuery}&id=${record.id}"/>"
+                                            >修改</a>
+                                            </li>
+                                            <li><a class="dropdown-item"
+                                                   href="<c:url value="/${pathInfo.controller}/delete?${pageQuery}&id=${record.id}"/>"
+                                            >删除</a></li>
+                                        </ul>
+                                    </div>
                                 </td>
                             </c:if>
 
@@ -109,7 +88,7 @@
                         操作
                     </div>
                     <div class="card-body">
-                        <a class="btn btn-success" href="/${controllerPath}/add">新增</a>
+                        <a class="btn btn-success" href="/${pathInfo.controller}/add">新增</a>
                     </div>
                 </div>
             </c:if>

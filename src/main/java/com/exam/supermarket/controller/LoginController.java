@@ -20,7 +20,7 @@ public class LoginController extends BaseController {
 
     @Override
     protected void index(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/templates/login/login.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/templates/login/index.jsp").forward(req, resp);
     }
 
     protected void logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

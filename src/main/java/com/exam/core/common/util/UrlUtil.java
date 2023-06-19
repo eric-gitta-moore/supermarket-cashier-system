@@ -26,7 +26,7 @@ public class UrlUtil {
             pathInfo.setModule("index");
             pathInfo.setController(uri.split("/")[1]);
             pathInfo.setAction(uri.split("/")[2]);
-        } else if (slashCount == 3) {
+        } else {
             pathInfo.setModule(uri.split("/")[1]);
             pathInfo.setController(uri.split("/")[2]);
             pathInfo.setAction(uri.split("/")[3]);
