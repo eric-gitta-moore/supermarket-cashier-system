@@ -48,7 +48,7 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item"
-                                                   href="<c:url value="/${pathInfo.controller}/change?${pageQuery}&id=${record.id}"/>"
+                                                   href="<c:url value="/${pathInfo.controller}/edit?${pageQuery}&id=${record.id}"/>"
                                             >修改</a>
                                             </li>
                                             <li><a class="dropdown-item"

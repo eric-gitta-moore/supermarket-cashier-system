@@ -37,10 +37,10 @@ public class IndexController extends BaseController<GoodPo> {
     }
 
     @Override
-    protected void change(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void edit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         SiteMetadata siteMetadata = new SiteMetadata("修改商品", "修改商品", "修改商品", "");
         req.setAttribute("siteMetadata", siteMetadata);
-        super.change(req, resp);
+        super.edit(req, resp);
     }
 
     protected Map<String, FieldDescriptor> getFields(HttpServletRequest req, HttpServletResponse resp) {
