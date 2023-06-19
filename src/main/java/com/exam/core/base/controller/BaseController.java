@@ -6,6 +6,7 @@ import com.exam.core.common.metadata.PathInfo;
 import com.exam.core.common.plugin.pagination.Page;
 import com.exam.core.common.util.GenericsUtils;
 import com.exam.core.common.util.UrlUtil;
+import com.exam.supermarket.metadata.FieldDescriptor;
 import com.exam.supermarket.util.AuthorActionDispatcherUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -75,7 +76,7 @@ public class BaseController<T> extends HttpServlet {
     }
 
     protected void add(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        req.setAttribute("fields", getUpdateFields(req, resp));
+        req.setAttribute("fields", getAddFields(req, resp));
         req.getRequestDispatcher(String.format("%s/add.jsp", this.templatePath)).forward(req, resp);
     }
 
@@ -130,11 +131,15 @@ public class BaseController<T> extends HttpServlet {
         this.sendRedirectHome(req, resp);
     }
 
-    protected Map<String, String> getUpdateFields(HttpServletRequest req, HttpServletResponse resp) {
+    protected Map<String, FieldDescriptor> getUpdateFields(HttpServletRequest req, HttpServletResponse resp) {
         return new LinkedHashMap<>();
     }
 
-    protected Map<String, String> getIndexFields(HttpServletRequest req, HttpServletResponse resp) {
+    protected Map<String, FieldDescriptor> getAddFields(HttpServletRequest req, HttpServletResponse resp) {
+        return new LinkedHashMap<>();
+    }
+
+    protected Map<String, FieldDescriptor> getIndexFields(HttpServletRequest req, HttpServletResponse resp) {
         return new LinkedHashMap<>();
     }
 

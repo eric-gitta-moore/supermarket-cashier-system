@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--@elvariable id="action" type="java.lang.String"--%>
 <%--@elvariable id="pathInfo" type="com.exam.core.common.metadata.PathInfo"--%>
+<%--@elvariable id="fields" type="java.util.Map<java.lang.String,com.exam.supermarket.metadata.FieldDescriptor>"--%>
 <html>
 <head>
     <title>首页</title>
@@ -16,9 +17,8 @@
             <table class="table align-middle">
                 <thead>
                 <tr>
-                    <%--@elvariable id="fields" type="java.util.Map"--%>
                     <c:forEach items="${fields.values()}" var="item">
-                        <th>${item}</th>
+                        <th>${item.tableHeaderLabel}</th>
                     </c:forEach>
                     <c:if test="${userInstance.role=='admin'}">
                         <th>操作</th>
@@ -27,16 +27,15 @@
                 </thead>
                 <tbody>
                 <%--@elvariable id="records" type="java.util.List<com.exam.supermarket.po.GoodPo>"--%>
-                <c:forEach items="${records}" var="item">
+                <c:forEach items="${records}" var="record">
                     <%--@elvariable id="pageQuery" type="java.lang.String"--%>
                     <form
-                            action="<c:url value="/${pathInfo.controller}/save?${pageQuery}&id=${item.id}"/>"
+                            action="<c:url value="/${pathInfo.controller}/save?${pageQuery}&id=${record.id}"/>"
                             method="post">
                         <tr>
 
-                                <%--@elvariable id="fields" type="java.util.Map"--%>
-                            <c:forEach items="${fields.keySet()}" var="key">
-                                <td>${item[key]}</td>
+                            <c:forEach items="${fields.values()}" var="fieldDesc">
+                                <td>${record[fieldDesc.fieldName]}</td>
                             </c:forEach>
 
                                 <%-- 操作 --%>
@@ -50,11 +49,11 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item"
-                                                   href="<c:url value="/${pathInfo.controller}/change?${pageQuery}&id=${item.id}"/>"
+                                                   href="<c:url value="/${pathInfo.controller}/change?${pageQuery}&id=${record.id}"/>"
                                             >修改</a>
                                             </li>
                                             <li><a class="dropdown-item"
-                                                   href="<c:url value="/${pathInfo.controller}/delete?${pageQuery}&id=${item.id}"/>"
+                                                   href="<c:url value="/${pathInfo.controller}/delete?${pageQuery}&id=${record.id}"/>"
                                             >删除</a></li>
                                         </ul>
                                     </div>
