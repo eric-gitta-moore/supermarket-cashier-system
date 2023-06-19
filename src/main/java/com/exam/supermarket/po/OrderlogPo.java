@@ -4,6 +4,7 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Data
 public class OrderlogPo implements Serializable {
@@ -21,18 +22,15 @@ public class OrderlogPo implements Serializable {
     @ExcelProperty("商品id")
     private String goodId;
 
-    @ExcelProperty("购买数量")
-    private Integer num;
-
     @ExcelProperty("应付")
-    private String payable;
+    private Double payable;
 
     @ExcelProperty("实付")
-    private String payment;
+    private Double payment;
 
     @ExcelProperty("优惠标记")
     private String goodsTag;
 
     @ExcelProperty("交易时间")
-    private String time;
+    private Timestamp time;
 }

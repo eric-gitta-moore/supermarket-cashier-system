@@ -10,7 +10,7 @@
 <div class="container mt-3 ">
     <div class="row justify-content-center">
         <div class="col-6">
-            <form action="<c:url value="/login/login"/>" method="post">
+            <form action="/login/login" method="post">
                 <c:if test="${msg!=null}">
                     <div class="alert alert-${alertLevel}" role="alert">${msg}</div>
                 </c:if>

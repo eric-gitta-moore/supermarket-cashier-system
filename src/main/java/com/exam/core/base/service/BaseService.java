@@ -69,8 +69,7 @@ public class BaseService<T> {
      * @param batchSize  插入批次数量
      */
     public boolean saveBatch(Collection<T> entityList, int batchSize) {
-        // TODO: 插入（批量）
-        return false;
+        return entityList.stream().allMatch(e -> this.save(e) != null);
     }
 
     /**
@@ -199,7 +198,7 @@ public class BaseService<T> {
      *
      * @param id 主键ID
      */
-    public T getById(Serializable id)  {
+    public T getById(Serializable id) {
         return dao.selectById(id);
     }
 
@@ -208,8 +207,12 @@ public class BaseService<T> {
      *
      * @param idList 主键ID列表
      */
-    public List<T> listByIds(Collection<? extends Serializable> idList) throws SQLException {
-        return dao.selectBatchIds(idList);
+    public List<T> listByIds(Collection<? extends Serializable> idList) {
+        try {
+            return dao.selectBatchIds(idList);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -225,7 +228,7 @@ public class BaseService<T> {
      * 根据 Wrapper，查询一条记录 <br/>
      * <p>结果集，如果是多个会抛出异常，随机取一条加上限制条件 wrapper.last("LIMIT 1")</p>
      */
-    public T getOne(T entity) throws SQLException {
+    public T getOne(T entity) {
         return getOne(entity, true);
     }
 
@@ -234,7 +237,7 @@ public class BaseService<T> {
      *
      * @param throwEx 有多个 result 是否抛出异常
      */
-    public T getOne(T entity, boolean throwEx) throws SQLException {
+    public T getOne(T entity, boolean throwEx) {
         return dao.selectOne(entity, throwEx);
     }
 
