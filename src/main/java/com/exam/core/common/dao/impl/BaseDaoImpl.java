@@ -8,13 +8,12 @@ import com.exam.core.common.util.GenericsUtils;
 import com.exam.core.common.util.SqlUtil;
 import com.exam.supermarket.util.DbPoolUtil;
 import lombok.Getter;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.MapListHandler;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
+import org.apache.commons.dbutils.handlers.*;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -128,6 +127,39 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
         Class<T> tClass = GenericsUtils.getSuperClassGenericType(this.getClass());
         List<T> poList = runner.query(sql, new BeanListHandler<>(tClass));
         return poList;
+    }
+
+    @Override
+    public Map<String, T> selectKeyedBatchIds(Collection<? extends Serializable> idList) throws SQLException {
+        String sql = "select * from " + this.table + " where 1=1";
+        List<String> ids = idList.stream().map(e -> e.toString()).toList();
+        sql += " and " + this.idField + " in (" + String.join(",", ids) + ")";
+        Class<T> tClass = GenericsUtils.getSuperClassGenericType(this.getClass());
+        Map<Object, Map<String, Object>> sqlRes = runner.query(sql, new KeyedHandler<>(this.getIdField()));
+        Map<String, T> res = new HashMap<>();
+        sqlRes.forEach((key, value) -> {
+            T entity = null;
+            try {
+                entity = tClass.getConstructor().newInstance();
+            } catch (InstantiationException ex) {
+                throw new RuntimeException(ex);
+            } catch (IllegalAccessException ex) {
+                throw new RuntimeException(ex);
+            } catch (InvocationTargetException ex) {
+                throw new RuntimeException(ex);
+            } catch (NoSuchMethodException ex) {
+                throw new RuntimeException(ex);
+            }
+            try {
+                BeanUtils.populate(entity, value);
+            } catch (IllegalAccessException ex) {
+                throw new RuntimeException(ex);
+            } catch (InvocationTargetException ex) {
+                throw new RuntimeException(ex);
+            }
+            res.put(String.valueOf(key), entity);
+        });
+        return res;
     }
 
     @Override

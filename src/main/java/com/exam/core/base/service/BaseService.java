@@ -215,6 +215,14 @@ public class BaseService<T> {
         }
     }
 
+    public Map<String, T> keyedListByIds(Collection<? extends Serializable> idList) {
+        try {
+            return dao.selectKeyedBatchIds(idList);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * 查询（根据 columnMap 条件）
      *

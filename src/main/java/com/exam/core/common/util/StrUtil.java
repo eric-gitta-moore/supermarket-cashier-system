@@ -1,5 +1,6 @@
 package com.exam.core.common.util;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class StrUtil {
         return countMap;
     }
 
-    public static Map<String, Integer> statOccurrences(List<String> strList) {
+    public static Map<String, Integer> statOccurrences(Collection<String> strList) {
         Map<String, Integer> countMap = new HashMap<>();
 
         // 统计数字出现次数
