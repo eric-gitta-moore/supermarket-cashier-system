@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">导航栏</a>
         <button class="navbar-toggler" type="button"
@@ -22,7 +22,7 @@
                     <a class="nav-link" href="/orderlog">订单管理</a>
                 </li>
             </ul>
-            <a href="/login/logout" class="btn btn-info">退出登录</a>
+            <a href="/login/logout" class="btn btn-outline-warning">退出登录</a>
         </div>
     </div>
 </nav>

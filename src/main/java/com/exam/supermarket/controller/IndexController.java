@@ -15,6 +15,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * 商品管理
+ */
 @WebServlet({"/index", "/index/*"})
 @MultipartConfig
 public class IndexController extends BaseController<GoodPo> {

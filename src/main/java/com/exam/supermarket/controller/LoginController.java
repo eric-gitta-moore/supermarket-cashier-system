@@ -12,6 +12,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
+/**
+ * 登录注册找回密码
+ */
 @WebServlet({"/login", "/login/*"})
 public class LoginController extends BaseController {
 

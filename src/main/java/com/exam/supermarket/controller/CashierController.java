@@ -28,6 +28,9 @@ import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.*;
 
+/**
+ * 收银台
+ */
 @WebServlet({"/cashier", "/cashier/*"})
 @MultipartConfig
 public class CashierController extends BaseController<GoodPo> {

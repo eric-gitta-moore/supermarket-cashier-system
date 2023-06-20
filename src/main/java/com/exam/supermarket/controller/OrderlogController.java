@@ -26,6 +26,9 @@ import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * 购买订单管理
+ */
 @WebServlet({"/orderlog", "/orderlog/*"})
 @MultipartConfig
 public class OrderlogController extends BaseController<OrderlogPo> {
