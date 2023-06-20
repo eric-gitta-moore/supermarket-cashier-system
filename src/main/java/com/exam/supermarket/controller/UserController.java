@@ -16,6 +16,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * 用户管理
+ */
 @WebServlet({"/user", "/user/*"})
 @MultipartConfig
 public class UserController extends BaseController<UserPo> {
